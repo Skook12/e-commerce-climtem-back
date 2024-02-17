@@ -15,4 +15,24 @@ $ docker logs [container_id]
 ```
 $ docker run -P {port} -d {tag}
 ```
+```
+$ docker exec -it {container_name} {op}
+```
 ---
+## Psql
+**Login**
+```
+$psql -U postgres
+```
+**List databases**
+```
+$\l
+```
+**Connect database**
+```
+$\c {database}
+```
+**Show tables**
+```
+$\dt
+```
