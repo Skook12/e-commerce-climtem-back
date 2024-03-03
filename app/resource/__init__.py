@@ -1,5 +1,5 @@
-from . import teste
+from . import user
 
 __all__ = [
-    'teste'
+    'user'
 ]
