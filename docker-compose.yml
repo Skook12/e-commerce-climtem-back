@@ -1,0 +1,35 @@
+version: "3.5"
+
+services:
+  climtem-back:
+    image: climtem-back
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    restart: always
+    depends_on: 
+      - database
+    ports:
+      - "5000:5000"
+    networks:
+      - host-net
+
+  database:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: $PSQL_DB
+      POSTGRES_USER: $PSQL_USER
+      POSTGRES_PASSWORD: $PSQL_PASSWORD
+    volumes:
+      - ./Create_Table_Ecommerce.sql:/docker-entrypoint-initdb.d/Create_Table_Ecommerce.sql
+      - var/lib/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - host-net
+
+networks:
+  host-net:
+    name: host-net
+    driver: bridge

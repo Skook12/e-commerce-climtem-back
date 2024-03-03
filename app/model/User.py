@@ -1,9 +1,16 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class User:
-    id: int = field(init=False)
     name: str
     email: str
     password: str
     phone: int
+
+    def load(self):
+        return (
+            f'{self.name}',
+            f'{self.email}',
+            f'{self.password}',
+            self.phone
+        )
