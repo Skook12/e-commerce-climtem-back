@@ -1,12 +1,12 @@
 /* Tabela de criacao do usuario, no postgre não se pode criar um so com User,
    aí inseri como UserTable */
-   
+
 CREATE TABLE UserTable (
     ID_User SERIAL PRIMARY KEY,
     nome VARCHAR(255),
     email VARCHAR(255),
     senha VARCHAR(255),
-    telefone INT
+    telefone BIGINT
 );
 
 /* Tabela de criacao do endereco */

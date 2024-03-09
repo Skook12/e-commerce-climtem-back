@@ -25,7 +25,7 @@ def get_blueprint(srvc: UserService) -> Blueprint:
             password=data['password'],
             phone=data['phone']
         )
-        r = srvc.insert(user.load())
-        return jsonify(user), HTTPStatus.CREATED if r == 201 else r
+        status = srvc.insert(user.load())
+        return jsonify(user), HTTPStatus.CREATED if status == 201 else status
     
     return bp
