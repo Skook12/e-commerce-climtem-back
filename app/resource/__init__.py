@@ -1,5 +1,9 @@
-from . import user
+from . import (
+    user,
+    address
+)
 
 __all__ = [
-    'user'
+    'user',
+    'address'
 ]

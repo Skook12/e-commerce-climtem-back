@@ -12,7 +12,7 @@ def get_blueprint(srvc: UserService) -> Blueprint:
         return jsonify(users)
 
     @bp.get('/user/<int:id>')
-    def getUser(id):
+    def getUserbyid(id):
         user = srvc.select(id)
         return jsonify(user)
     

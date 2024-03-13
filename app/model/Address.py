@@ -1,11 +1,20 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 @dataclass
 class Address:
-    id: int = field(init=False)
     user_id: int
     number: int
     complement: Optional[str]
     cep: str
-    city: int
+    city: str
+
+    def load(self):
+        return (
+            self.user_id,
+            self.number,
+            f'{self.complement}',
+            f'{self.cep}',
+            f'{self.city}'
+        )
+
