@@ -2,8 +2,8 @@ from datetime import datetime
 from psycopg2._psycopg import connection
 from app.db import RepoI
 
-class UserService(RepoI):
-    __table = "usertable"
+class BrandService(RepoI):
+    __table = "produto_marca"
 
     def __init__(self, db: connection):
         self.__conn = db
@@ -12,8 +12,8 @@ class UserService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (nome, email, senha, telefone)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO {self.__table} (ID_Produto, nome)
+                VALUES (%s, %s)
             """
             cursor.execute(query, values)
             self.__conn.commit()
@@ -30,7 +30,7 @@ class UserService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_User = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE ID_Produto_Marca = {id};"
 
         try:
             cursor.execute(query)
