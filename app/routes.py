@@ -1,11 +1,13 @@
 from flask import Flask
 from .resource import (
     user,
-    address
+    address,
+    brand
 )
 from .service import (
     UserService,
-    AddressService
+    AddressService,
+    BrandService
 )
 from .db import connection
 
@@ -22,5 +24,8 @@ def create_server(config):
 
     addressService = AddressService(db)
     app.register_blueprint(address.get_blueprint(addressService), url_prefix=PREFX_API)
+    
+    brandService = BrandService(db)
+    app.register_blueprint(brand.get_blueprint(brandService), url_prefix=PREFX_API)
 
-    return app 
+    return app
