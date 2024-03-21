@@ -1,9 +1,14 @@
 from .user import UserService
 from .address import AddressService
 from .brand import BrandService
+from .category import CategoryService
+from .order import OrderService
 
 __all__ = [
     'UserService',
     'AddressService',
-    'BrandService'
+    'BrandService',
+    'CategoryService',
+    'OrderService'
+    
 ]
