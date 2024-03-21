@@ -2,12 +2,16 @@ from flask import Flask
 from .resource import (
     user,
     address,
-    brand
+    brand,
+    category,
+    order
 )
 from .service import (
     UserService,
     AddressService,
-    BrandService
+    BrandService,
+    CategoryService,
+    OrderService
 )
 from .db import connection
 
@@ -27,5 +31,11 @@ def create_server(config):
     
     brandService = BrandService(db)
     app.register_blueprint(brand.get_blueprint(brandService), url_prefix=PREFX_API)
+    
+    categoryService = CategoryService(db)
+    app.register_blueprint(category.get_blueprint(categoryService), url_prefix=PREFX_API)
+    
+    orderService = OrderService(db)
+    app.register_blueprint(order.get_blueprint(orderService), url_prefix=PREFX_API)
 
     return app
