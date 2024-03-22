@@ -7,3 +7,10 @@ class Product:
     description: str
     value: float
     discount: float
+    def load(self):
+        return (
+            self.name,
+            self.description,
+            self.value,
+            self.discount
+        )
