@@ -1,9 +1,19 @@
 from . import (
     user,
-    address
+    address,
+    brand,
+    category,
+    order,
+    product,
+    stock
 )
 
 __all__ = [
     'user',
-    'address'
+    'address',
+    'brand',
+    'category',
+    'order',
+    'product',
+    'stock'
 ]
