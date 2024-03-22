@@ -4,14 +4,18 @@ from .resource import (
     address,
     brand,
     category,
-    order
+    order,
+    stock,
+    product
 )
 from .service import (
     UserService,
     AddressService,
     BrandService,
     CategoryService,
-    OrderService
+    OrderService,
+    ProductService,
+    StockServices
 )
 from .db import connection
 
@@ -37,5 +41,11 @@ def create_server(config):
     
     orderService = OrderService(db)
     app.register_blueprint(order.get_blueprint(orderService), url_prefix=PREFX_API)
+    
+    productService = ProductService(db)
+    app.register_blueprint(product.get_blueprint(productService), url_prefix=PREFX_API)
+    
+    stockServices = StockServices(db)
+    app.register_blueprint(stock.get_blueprint(stockServices), url_prefix=PREFX_API)
 
     return app
