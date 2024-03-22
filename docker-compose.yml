@@ -23,7 +23,7 @@ services:
       POSTGRES_PASSWORD: $PSQL_PASSWORD
     volumes:
       - ./Create_Table_Ecommerce.sql:/docker-entrypoint-initdb.d/Create_Table_Ecommerce.sql
-      - var/lib/postgres
+      - /var/lib/postgres
     ports:
       - "5432:5432"
     networks:
