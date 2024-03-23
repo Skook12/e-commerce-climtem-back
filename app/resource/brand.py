@@ -20,7 +20,6 @@ def get_blueprint(srvc: BrandService) -> Blueprint:
     def postBrand():
         data = request.json
         brand = Brand(
-            product_id = data['product_id'],
             name = data['name']
         )
         status = srvc.insert(brand.load())

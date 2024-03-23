@@ -12,8 +12,8 @@ class CategoryService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_Produto, nome)
-                VALUES (%s, %s)
+                INSERT INTO {self.__table} (nome)
+                VALUES (%s)
             """
             cursor.execute(query, values)
             self.__conn.commit()
