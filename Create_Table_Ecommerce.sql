@@ -20,22 +20,22 @@ CREATE TABLE User_Endereco (
 );
 
 /* Tabela de criacao da marca do produto */
-CREATE TABLE Produto_Marca (
-   ID_Produto_Marca SERIAL PRIMARY KEY,
-   nome VARCHAR(255)
+CREATE TABLE Brand (
+   brand_id SERIAL PRIMARY KEY,
+   name VARCHAR(255)
 );
 
 /* Tabela de criacao da categoria do produto */
-CREATE TABLE Produto_Categoria (
-  ID_Produto_Categoria SERIAL PRIMARY KEY,
-  nome VARCHAR (255)
+CREATE TABLE Category (
+  category_id SERIAL PRIMARY KEY,
+  name VARCHAR (255)
 );
 
 /* Tabela de criacao do produto */
 CREATE TABLE Produto (
    ID_Produto SERIAL PRIMARY KEY,
    ID_Marca INT REFERENCES Produto_Marca(ID_Produto_Marca),
-   ID_Categoria INT REFERENCES Produto_Categoria(ID_Produto_Categoria), 
+   ID_Category INT REFERENCES Category(category_id), 
    nome_produto VARCHAR(255),
    descricao TEXT,
    valor DECIMAL,

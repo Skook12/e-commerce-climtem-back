@@ -3,7 +3,7 @@ from psycopg2._psycopg import connection
 from app.db import RepoI
 
 class CategoryService(RepoI):
-    __table = "produto_categoria"
+    __table = "category"
 
     def __init__(self, db: connection):
         self.__conn = db
@@ -12,10 +12,10 @@ class CategoryService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (nome)
-                VALUES (%s)
+                INSERT INTO {self.__table} (name)
+                VALUES ('{values}')
             """
-            cursor.execute(query, values)
+            cursor.execute(query)
             self.__conn.commit()
         
         except Exception as e:
@@ -30,7 +30,7 @@ class CategoryService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Produto_Categoria = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE category_id = {id};"
 
         try:
             cursor.execute(query)

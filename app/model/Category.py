@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class Category:
@@ -6,5 +6,5 @@ class Category:
     
     def load(self):
         return (
-            f'{self.name}'
+            self.name
         )
