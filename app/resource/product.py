@@ -7,24 +7,27 @@ def get_blueprint(srvc: ProductService) -> Blueprint:
     bp = Blueprint("Product", __name__)
     
     @bp.get('/product')
-    def getOrder():
-        order = srvc.select()
-        return jsonify(order)
+    def getProduct():
+        r = srvc.select()
+        return jsonify(r)
 
     @bp.get('/product/<int:id>')
-    def getOrderbyid(id):
-        order = srvc.select(id)
-        return jsonify(order)
+    def getProductbyid(id):
+        r = srvc.select(id)
+        return jsonify(r)
     
     @bp.post('/product')
-    def postOrder():
+    def postProduct():
         data = request.json
-        order = Product(
-            User_id=data['User_id'],
-            buy_date=data['buy_date'],
-            status=data['status']
+        r = Product(
+            brand_id=data['brand_id'],
+            category_id=data['category_id'],
+            name=data['name'],
+            description=data['description'],
+            value=data['value'],
+            discount=data['discount']            
         )
-        status = srvc.insert(order.load())
-        return jsonify(order), HTTPStatus.CREATED if status == 201 else status
+        status = srvc.insert(r.load())
+        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     
     return bp
