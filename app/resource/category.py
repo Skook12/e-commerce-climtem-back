@@ -20,8 +20,6 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
     def postCategory():
         data = request.json
         category = Category(
-            id=data['id'],
-            product_id=data['product_id'],
            name=data['name']
         )
         status = srvc.insert(category.load())

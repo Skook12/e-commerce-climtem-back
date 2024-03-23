@@ -20,7 +20,6 @@ def get_blueprint(srvc: ProductService) -> Blueprint:
     def postOrder():
         data = request.json
         order = Product(
-            id=data['id'],
             User_id=data['User_id'],
             buy_date=data['buy_date'],
             status=data['status']

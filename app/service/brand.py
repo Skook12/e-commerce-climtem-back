@@ -3,7 +3,7 @@ from psycopg2._psycopg import connection
 from app.db import RepoI
 
 class BrandService(RepoI):
-    __table = "produto_marca"
+    __table = "brand"
 
     def __init__(self, db: connection):
         self.__conn = db
@@ -12,10 +12,10 @@ class BrandService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_Produto, nome)
-                VALUES (%s, %s)
+                INSERT INTO {self.__table} (name)
+                VALUES ('{values}')
             """
-            cursor.execute(query, values)
+            cursor.execute(query)
             self.__conn.commit()
         
         except Exception as e:

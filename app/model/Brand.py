@@ -1,12 +1,10 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class Brand:
-    product_id: int = field(init=False)
     name: str
 
     def load(self):
         return (
-            self.product_id,
-            f'{self.name}'
+            self.name
         )

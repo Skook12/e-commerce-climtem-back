@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: .docker/Dockerfile
     restart: always
-    depends_on: 
+    depends_on:
       - database
     ports:
       - "5000:5000"
