@@ -34,7 +34,7 @@ CREATE TABLE Category (
 /* Tabela de criacao do produto */
 CREATE TABLE Produto (
    ID_Produto SERIAL PRIMARY KEY,
-   ID_Marca INT REFERENCES Produto_Marca(ID_Produto_Marca),
+   ID_Marca INT REFERENCES Brand(brand_id),
    ID_Category INT REFERENCES Category(category_id), 
    nome_produto VARCHAR(255),
    descricao TEXT,
