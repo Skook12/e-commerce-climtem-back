@@ -3,7 +3,7 @@ from psycopg2._psycopg import connection
 from app.db import RepoI
 
 class StockServices(RepoI):
-    __table = "produto_estoque"
+    __table = "product_stock"
 
     def __init__(self, db: connection):
         self.__conn = db
@@ -12,7 +12,7 @@ class StockServices(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_Produto, quantidade, data_cadastro, modificado_em)
+                INSERT INTO {self.__table} (ID_Product, quantidade, data_cadastro, modificado_em)
                 VALUES (%s, %s, %s, %s)
             """
             cursor.execute(query, values)
@@ -30,7 +30,7 @@ class StockServices(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Produto_Estoque = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE ID_Product_Stock = {id};"
 
         try:
             cursor.execute(query)
