@@ -59,8 +59,8 @@ CREATE TABLE Products_Order (
 ); 
 
 /* Tabela de criacao do pagamento */
-CREATE TABLE User_Pagamento(
-	ID_User_Pagamento SERIAL PRIMARY KEY,	
+CREATE TABLE User_Payment(
+	ID_User_Payment SERIAL PRIMARY KEY,	
 	ID_Order INT REFERENCES User_Order(ID_Order),	
 	payment_type	VARCHAR (50),	
 	expiration DATE

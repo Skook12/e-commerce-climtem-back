@@ -12,7 +12,7 @@ class OrderService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_User, data_compra, status)
+                INSERT INTO {self.__table} (ID_User, buy_date, status)
                 VALUES (%s, %s, %s)
             """
             cursor.execute(query, values)
