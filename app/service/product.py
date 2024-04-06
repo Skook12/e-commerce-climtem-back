@@ -3,7 +3,7 @@ from psycopg2._psycopg import connection
 from app.db import RepoI
 
 class ProductService(RepoI):
-    __table = "produto"
+    __table = "product"
 
     def __init__(self, db: connection):
         self.__conn = db
@@ -30,7 +30,7 @@ class ProductService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Produto = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE ID_Product = {id};"
 
         try:
             cursor.execute(query)

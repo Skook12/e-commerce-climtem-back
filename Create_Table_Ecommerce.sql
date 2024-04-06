@@ -3,20 +3,20 @@
 
 CREATE TABLE UserTable (
     ID_User SERIAL PRIMARY KEY,
-    nome VARCHAR(255),
+    name VARCHAR(255),
     email VARCHAR(255),
-    senha VARCHAR(255),
-    telefone BIGINT
+    password VARCHAR(255),
+    phone BIGINT
 );
 
 /* Tabela de criacao do endereco */
-CREATE TABLE User_Endereco (
-    ID_User_Endereco SERIAL PRIMARY KEY,
+CREATE TABLE User_Address (
+    ID_User_Address SERIAL PRIMARY KEY,
     ID_User INT REFERENCES UserTable(ID_User),
-    numero INT,
-    complemento VARCHAR(255),
+    num INT,
+    complement VARCHAR(255),
     cep VARCHAR(10),
-    cidade VARCHAR(255)
+    city VARCHAR(255)
 );
 
 /* Tabela de criacao da marca do produto */
@@ -32,45 +32,45 @@ CREATE TABLE Category (
 );
 
 /* Tabela de criacao do produto */
-CREATE TABLE Produto (
-   ID_Produto SERIAL PRIMARY KEY,
+CREATE TABLE Product (
+   ID_Product SERIAL PRIMARY KEY,
    ID_Brand INT REFERENCES Brand(brand_id),
    ID_Category INT REFERENCES Category(category_id), 
-   nome_produto VARCHAR(255),
-   descricao TEXT,
-   valor DECIMAL,
-   desconto DECIMAL
+   name VARCHAR(255),
+   description TEXT,
+   value DECIMAL,
+   discount DECIMAL
 );
 
 /* Tabela de criacao do pedido */
-CREATE TABLE Pedido (
-  ID_Pedido SERIAL PRIMARY KEY, 
+CREATE TABLE User_Order (
+  ID_Order SERIAL PRIMARY KEY, 
   ID_User INT REFERENCES UserTable(ID_User), 
-  data_compra TIMESTAMP, 
+  buy_date TIMESTAMP, 
   status VARCHAR (50)
 );
 
 /* Tabela de criacao do carrinho */
-CREATE TABLE Produtos_Pedido (
-  ID_Produtos_Pedido SERIAL PRIMARY KEY, 
-  ID_Pedido INT REFERENCES Pedido(ID_Pedido), 
-  quantidade INT, 
-  valor_compra DECIMAL
+CREATE TABLE Products_Order (
+  ID_Products_Order SERIAL PRIMARY KEY, 
+  ID_Order INT REFERENCES User_Order(ID_Order), 
+  quantity INT, 
+  total_bought DECIMAL
 ); 
 
 /* Tabela de criacao do pagamento */
 CREATE TABLE User_Pagamento(
 	ID_User_Pagamento SERIAL PRIMARY KEY,	
-	ID_Pedido INT REFERENCES Pedido(ID_Pedido),	
-	tipo_pagamento	VARCHAR (50),	
-	prazo	DATE
-);	
+	ID_Order INT REFERENCES User_Order(ID_Order),	
+	payment_type	VARCHAR (50),	
+	expiration DATE
+);
 
 /* Tabela de criacao do estoque do produto */
-CREATE TABLE Produto_Estoque(
-	ID_Produto_Estoque	SERIAL	PRIMARY	KEY,	
-	ID_Produto	INT	REFERENCES	Produto(ID_Produto),	
-	quantidade	INT,	
-	data_cadastro	TIMESTAMP,	
-	modificado_em	TIMESTAMP
+CREATE TABLE Product_Stock(
+	ID_Product_Stock	SERIAL	PRIMARY	KEY,	
+	ID_Product	INT	REFERENCES	Product(ID_Product),	
+	quantity	INT,	
+	register_date	TIMESTAMP,	
+	modified_date	TIMESTAMP
 );

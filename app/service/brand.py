@@ -30,7 +30,7 @@ class BrandService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Produto_Marca = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE brand_id = {id};"
 
         try:
             cursor.execute(query)

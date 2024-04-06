@@ -3,7 +3,7 @@ from psycopg2._psycopg import connection
 from app.db import RepoI
 
 class AddressService(RepoI):
-    __table = "user_endereco"
+    __table = "user_address"
 
     def __init__(self, db: connection):
         self.__conn = db
@@ -12,7 +12,7 @@ class AddressService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (id_user, numero, complemento, cep, cidade)
+                INSERT INTO {self.__table} (id_user, num, complement, cep, city)
                 VALUES (%s, %s, %s, %s, %s)
             """
             cursor.execute(query, values)
@@ -30,7 +30,7 @@ class AddressService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE id_user_endereco = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE id_user_address = {id};"
 
         try:
             cursor.execute(query)
