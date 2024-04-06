@@ -12,7 +12,7 @@ class StockServices(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_Product, quantidade, data_cadastro, modificado_em)
+                INSERT INTO {self.__table} (ID_Product, quantity, register_date, modified_date)
                 VALUES (%s, %s, %s, %s)
             """
             cursor.execute(query, values)
