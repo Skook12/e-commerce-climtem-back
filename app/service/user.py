@@ -12,7 +12,7 @@ class UserService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (nome, email, senha, telefone)
+                INSERT INTO {self.__table} (name, email, password, phone)
                 VALUES (%s, %s, %s, %s)
             """
             cursor.execute(query, values)

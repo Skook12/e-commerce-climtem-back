@@ -43,7 +43,7 @@ CREATE TABLE Product (
 );
 
 /* Tabela de criacao do pedido */
-CREATE TABLE Order (
+CREATE TABLE User_Order (
   ID_Order SERIAL PRIMARY KEY, 
   ID_User INT REFERENCES UserTable(ID_User), 
   buy_date TIMESTAMP, 
@@ -53,7 +53,7 @@ CREATE TABLE Order (
 /* Tabela de criacao do carrinho */
 CREATE TABLE Products_Order (
   ID_Products_Order SERIAL PRIMARY KEY, 
-  ID_Order INT REFERENCES Order(ID_Order), 
+  ID_Order INT REFERENCES User_Order(ID_Order), 
   quantity INT, 
   total_bought DECIMAL
 ); 
@@ -61,7 +61,7 @@ CREATE TABLE Products_Order (
 /* Tabela de criacao do pagamento */
 CREATE TABLE User_Pagamento(
 	ID_User_Pagamento SERIAL PRIMARY KEY,	
-	ID_Oder INT REFERENCES Order(ID_Order),	
+	ID_Order INT REFERENCES User_Order(ID_Order),	
 	payment_type	VARCHAR (50),	
 	expiration DATE
 );

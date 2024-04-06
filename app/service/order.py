@@ -3,7 +3,7 @@ from psycopg2._psycopg import connection
 from app.db import RepoI
 
 class OrderService(RepoI):
-    __table = "order"
+    __table = "user_order"
 
     def __init__(self, db: connection):
         self.__conn = db

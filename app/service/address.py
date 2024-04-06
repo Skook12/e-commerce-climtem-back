@@ -12,7 +12,7 @@ class AddressService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (id_user, numero, complemento, cep, cidade)
+                INSERT INTO {self.__table} (id_user, num, complement, cep, city)
                 VALUES (%s, %s, %s, %s, %s)
             """
             cursor.execute(query, values)
