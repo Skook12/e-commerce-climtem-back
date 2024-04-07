@@ -41,7 +41,7 @@ class CategoryService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        return results
+        return [{'id': row[0], 'name': row[1]} for row in results]
     
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()

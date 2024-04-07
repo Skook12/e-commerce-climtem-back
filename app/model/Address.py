@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, astuple
 from typing import Optional
 
 @dataclass
@@ -10,11 +10,4 @@ class Address:
     city: str
 
     def load(self):
-        return (
-            self.user_id,
-            self.number,
-            f'{self.complement}',
-            f'{self.cep}',
-            f'{self.city}'
-        )
-
+        return astuple(self)

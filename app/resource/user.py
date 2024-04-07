@@ -8,24 +8,24 @@ def get_blueprint(srvc: UserService) -> Blueprint:
 
     @bp.get('/users')
     def getUsers():
-        users = srvc.select()
-        return jsonify(users)
+        r = srvc.select()
+        return jsonify(r)
 
     @bp.get('/user/<int:id>')
     def getUserbyid(id):
-        user = srvc.select(id)
-        return jsonify(user)
+        r = srvc.select(id)
+        return jsonify(r)
     
     @bp.post('/users')
     def postUser():
         data = request.json
-        user = User(
+        r = User(
             name=data['name'],
             email=data['email'],
             password=data['password'],
             phone=data['phone']
         )
-        status = srvc.insert(user.load())
-        return jsonify(user), HTTPStatus.CREATED if status == 201 else status
+        status = srvc.insert(r.load())
+        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     
     return bp

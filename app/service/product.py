@@ -41,7 +41,16 @@ class ProductService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        return results
+        return [
+            {
+                'id': row[0],
+                'brand_id': row[1],
+                'category_id': row[2],
+                'name': row[3],
+                'description': row[4],
+                'value': row[5],
+                'discount': row[6]
+            } for row in results]
     
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()

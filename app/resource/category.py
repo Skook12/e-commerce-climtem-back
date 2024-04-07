@@ -8,21 +8,21 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
     
     @bp.get('/category')
     def getCategory():
-        category = srvc.select()
-        return jsonify(category)
+        r = srvc.select()
+        return jsonify(r)
 
     @bp.get('/category/<int:id>')
     def getCategorybyid(id):
-        category = srvc.select(id)
-        return jsonify(category)
+        r = srvc.select(id)
+        return jsonify(r)
     
     @bp.post('/category')
     def postCategory():
         data = request.json
-        category = Category(
+        r = Category(
            name=data['name']
         )
-        status = srvc.insert(category.load())
-        return jsonify(category), HTTPStatus.CREATED if status == 201 else status
+        status = srvc.insert(r.load())
+        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     
     return bp

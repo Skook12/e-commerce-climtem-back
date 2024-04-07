@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, astuple
 
 @dataclass
 class Product:
@@ -10,11 +10,4 @@ class Product:
     discount: float
 
     def load(self):
-        return (
-            self.brand_id,
-            self.category_id,
-            self.name,
-            self.description,
-            self.value,
-            self.discount
-        )
+        return astuple(self)

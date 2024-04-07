@@ -8,24 +8,23 @@ def get_blueprint(srvc: OrderService) -> Blueprint:
     
     @bp.get('/order')
     def getOrder():
-        order = srvc.select()
-        return jsonify(order)
+        r = srvc.select()
+        return jsonify(r)
 
     @bp.get('/order/<int:id>')
     def getOrderbyid(id):
-        order = srvc.select(id)
-        return jsonify(order)
+        r = srvc.select(id)
+        return jsonify(r)
     
     @bp.post('/order')
     def postOrder():
         data = request.json
-        order = Order(
-            id=data['id'],
-            User_id=data['User_id'],
+        r = Order(
+            user_id=data['user_id'],
             buy_date=data['buy_date'],
             status=data['status']
         )
-        status = srvc.insert(order.load())
-        return jsonify(order), HTTPStatus.CREATED if status == 201 else status
+        status = srvc.insert(r.load())
+        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     
     return bp
