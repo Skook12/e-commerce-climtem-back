@@ -7,25 +7,26 @@ def get_blueprint(srvc: StockServices) -> Blueprint:
     bp = Blueprint("Stock", __name__)
     
     @bp.get('/stock')
-    def getCategory():
-        category = srvc.select()
-        return jsonify(category)
+    def getStock():
+        r = srvc.select()
+        return jsonify(r)
 
     @bp.get('/stock/<int:id>')
-    def getCategorybyid(id):
-        category = srvc.select(id)
-        return jsonify(category)
+    def getStockbyid(id):
+        r = srvc.select(id)
+        return jsonify(r)
     
     @bp.post('/stock')
-    def postCategory():
+    def postStock():
         data = request.json
-        category = Stock(
-            id=data['id'],
+        r = Stock(
             product_id=data['product_id'],
-           name=data['name']
+            amount=data['amount'],
+            created_at=data['created_at'],
+            updated_at=data['updated_at']
         )
-        status = srvc.insert(category.load())
-        return jsonify(category), HTTPStatus.CREATED if status == 201 else status
+        status = srvc.insert(r.load())
+        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     
     return bp
 

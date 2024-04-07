@@ -1,16 +1,12 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, astuple
 from datetime import datetime
 
 @dataclass
 class Stock:
-    product_id: int = field(init=False)
+    product_id: int 
     amount: str
     created_at: datetime
     updated_at: datetime
+
     def load(self):
-        return (
-            self.amount,
-            self.datetime,
-            f'{self.created_at}',
-            f'{self.updated_at}'
-        )
+        return astuple(self)

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, astuple
 
 @dataclass
 class User:
@@ -8,9 +8,4 @@ class User:
     phone: int
 
     def load(self):
-        return (
-            f'{self.name}',
-            f'{self.email}',
-            f'{self.password}',
-            self.phone
-        )
+        return astuple(self)

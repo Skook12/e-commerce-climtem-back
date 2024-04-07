@@ -41,7 +41,7 @@ class AddressService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        return results
+        return [{'id': row[0], 'id_user': row[1], 'number': row[2], 'complement': row[3], 'cep': row[4], 'city': row[5]} for row in results]
     
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()

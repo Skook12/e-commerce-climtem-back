@@ -41,7 +41,7 @@ class OrderService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        return results
+        return [{'id': row[0], 'user_id': row[1], 'buy_date': row[2], 'status': row[3]} for row in results]
     
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
