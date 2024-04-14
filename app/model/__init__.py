@@ -6,6 +6,7 @@ from .Product import Product
 from .Payment import Payment
 from .Stock import Stock
 from .User import User
+from .Image import Image
 
 
 __all__ = [
@@ -16,5 +17,6 @@ __all__ = [
     'Product',
     'Payment',
     'Stock',
-    'User'
+    'User',
+    'Image'
 ]
