@@ -5,7 +5,8 @@ from . import (
     category,
     order,
     product,
-    stock
+    stock,
+    image
 )
 
 __all__ = [
@@ -15,5 +16,6 @@ __all__ = [
     'category',
     'order',
     'product',
-    'stock'
+    'stock',
+    'image'
 ]
