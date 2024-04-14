@@ -11,3 +11,11 @@ class Product:
 
     def load(self):
         return astuple(self)
+
+@dataclass
+class Image:
+    product_id: int
+    path: str
+    
+    def load(self):
+        return astuple(self)

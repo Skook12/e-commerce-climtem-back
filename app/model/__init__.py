@@ -2,7 +2,7 @@ from .Address import Address
 from .Brand import Brand
 from .Category import Category
 from .Order import Order
-from .Product import Product
+from .Product import Product, Image
 from .Payment import Payment
 from .Stock import Stock
 from .User import User
@@ -14,6 +14,7 @@ __all__ = [
     'Category',
     'Order',
     'Product',
+    'Image',
     'Payment',
     'Stock',
     'User'
