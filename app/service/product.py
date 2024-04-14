@@ -51,7 +51,7 @@ class ProductService(RepoI):
                 'value': row[5],
                 'discount': row[6]
             } for row in results]
-    
+
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
         try:

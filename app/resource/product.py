@@ -1,9 +1,12 @@
 from flask import Blueprint, jsonify, request
-from app.model import Product
-from app.service import ProductService
+from app.model import Product, Image
+from app.service import (
+    ProductService,
+    StorageService
+)
 from http import HTTPStatus
 
-def get_blueprint(srvc: ProductService) -> Blueprint:
+def get_blueprint(srvc: ProductService, storage: StorageService) -> Blueprint:
     bp = Blueprint("Product", __name__)
     
     @bp.get('/product')
@@ -29,5 +32,18 @@ def get_blueprint(srvc: ProductService) -> Blueprint:
         )
         status = srvc.insert(r.load())
         return jsonify(r), HTTPStatus.CREATED if status == 201 else status
+    
+    @bp.post('/product/image')
+    def postProductImages():
+        data = request.form['product']
+        path = request.form['path']
+        file = request.files['file']
+        r = Image(
+            product_id=data,
+            path=path
+        )
+        status = 201#storage.insert(r.load())
+        st = storage.loadFile(file, path)    
+        return jsonify(st), HTTPStatus.CREATED if status == 201 else status
     
     return bp

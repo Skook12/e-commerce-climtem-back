@@ -17,7 +17,8 @@ from .service import (
     OrderService,
     ProductService,
     StockServices,
-    ImageService
+    ImageService,
+    StorageService
 )
 from .db import connection
 
@@ -28,6 +29,7 @@ def create_server(config):
     '''Starts flask server'''
     app = Flask(__name__)
     db = connection.getConnection(config.PSQL_SETTINGS)
+    storage = StorageService(db)
 
     userService = UserService(db)
     app.register_blueprint(user.get_blueprint(userService), url_prefix=PREFX_API)
@@ -45,7 +47,7 @@ def create_server(config):
     app.register_blueprint(order.get_blueprint(orderService), url_prefix=PREFX_API)
     
     productService = ProductService(db)
-    app.register_blueprint(product.get_blueprint(productService), url_prefix=PREFX_API)
+    app.register_blueprint(product.get_blueprint(productService, storage), url_prefix=PREFX_API)
     
     stockServices = StockServices(db)
     app.register_blueprint(stock.get_blueprint(stockServices), url_prefix=PREFX_API)
