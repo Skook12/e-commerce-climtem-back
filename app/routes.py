@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from .resource import (
     user,
     address,
@@ -28,6 +29,8 @@ PREFX_API = '/api/v1/'
 def create_server(config):
     '''Starts flask server'''
     app = Flask(__name__)
+    CORS(app)
+
     db = connection.getConnection(config.PSQL_SETTINGS)
     storage = StorageService(db)
 
