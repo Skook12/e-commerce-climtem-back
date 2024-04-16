@@ -18,6 +18,16 @@ $ docker run -P {port} -d {tag}
 ```
 $ docker exec -it {container_name} {op}
 ```
+**Delete PSQL data**
+```
+$ docker volume ls
+```
+```
+$ docker volume prune
+```
+```
+$ docker volume rm project_pgdata
+```
 ---
 ## Psql
 **Login**

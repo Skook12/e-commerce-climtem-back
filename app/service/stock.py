@@ -25,12 +25,17 @@ class StockServices(RepoI):
         cursor.close()
         return 201
     
-    def select(self, id=None):
+    def select(self, search:str=None):
+        """param: 
+            - search: search query complement
+
+            SELECT * FROM Table WHERE (Complement);
+        """
         cursor = self.__conn.cursor()
         query = f"SELECT * FROM {self.__table};"
 
-        if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Product_Stock = {id};"
+        if search != None:
+            query = f"SELECT * FROM {self.__table} {search};"
 
         try:
             cursor.execute(query)
@@ -41,8 +46,14 @@ class StockServices(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        return results
-    
+        return [{
+            'id': row[0],
+            'product_id': row[1], 
+            'quantity': row[2],
+            'register_date': row[3],
+            'modified_date': row[4]
+        } for row in results]
+
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
         try:

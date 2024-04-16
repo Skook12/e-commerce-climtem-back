@@ -78,5 +78,5 @@ CREATE TABLE Product_Stock(
 CREATE TABLE Product_Image(
 	ID_Product_Image	SERIAL	PRIMARY	KEY,	
 	ID_Product	INT	REFERENCES	Product(ID_Product),	
-	link VARCHAR(255)
+	path VARCHAR(255)
 );

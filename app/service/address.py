@@ -25,12 +25,17 @@ class AddressService(RepoI):
         cursor.close()
         return 201
     
-    def select(self, id=None):
+    def select(self, search:str):
+        """param: 
+            - search: search query complement
+
+            SELECT * FROM Table WHERE (Complement);
+        """
         cursor = self.__conn.cursor()
         query = f"SELECT * FROM {self.__table};"
 
-        if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE id_user_address = {id};"
+        if search != None:
+            query = f"SELECT * FROM {self.__table} WHERE {search};"
 
         try:
             cursor.execute(query)

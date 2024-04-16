@@ -6,15 +6,9 @@ from http import HTTPStatus
 def get_blueprint(srvc: AddressService) -> Blueprint:
     bp = Blueprint("Address", __name__)
     
-    @bp.get('/address')
-    def getAddress():
-        '''[To be excluded] Development only!'''
-        r = srvc.select()
-        return jsonify(r)
-
-    @bp.get('/address/<int:id>')
-    def getAddressbyid(id):
-        r = srvc.select(id)
+    @bp.get('/address/<int:userid>')
+    def getAddressbyUser(userid):
+        r = srvc.select(f'ID_User = {userid}')
         return jsonify(r)
     
     @bp.post('/address')

@@ -25,12 +25,17 @@ class CategoryService(RepoI):
         cursor.close()
         return 201
     
-    def select(self, id=None):
+    def select(self, search:str=None):
+        """param: 
+            - search: search query complement
+
+            SELECT * FROM Table WHERE (Complement);
+        """
         cursor = self.__conn.cursor()
         query = f"SELECT * FROM {self.__table};"
 
-        if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE category_id = {id};"
+        if search != None:
+            query = f"SELECT * FROM {self.__table} WHERE {search};"
 
         try:
             cursor.execute(query)

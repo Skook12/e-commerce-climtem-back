@@ -1,10 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, astuple
 
 @dataclass
 class Image:
-    link: str
+    product_id:int
+    path: str
     
     def load(self):
-        return (
-            self.link
-        )
+        return astuple(self)

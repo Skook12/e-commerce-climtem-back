@@ -13,7 +13,7 @@ def get_blueprint(srvc: OrderService) -> Blueprint:
 
     @bp.get('/order/<int:id>')
     def getOrderbyid(id):
-        r = srvc.select(id)
+        r = srvc.select(f'ID_Order = {id}')
         return jsonify(r)
     
     @bp.post('/order')

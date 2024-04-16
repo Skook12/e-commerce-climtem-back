@@ -18,7 +18,6 @@ from .service import (
     OrderService,
     ProductService,
     StockServices,
-    ImageService,
     StorageService
 )
 from .db import connection
@@ -50,12 +49,11 @@ def create_server(config):
     app.register_blueprint(order.get_blueprint(orderService), url_prefix=PREFX_API)
     
     productService = ProductService(db)
-    app.register_blueprint(product.get_blueprint(productService, storage), url_prefix=PREFX_API)
+    app.register_blueprint(product.get_blueprint(productService), url_prefix=PREFX_API)
     
     stockServices = StockServices(db)
     app.register_blueprint(stock.get_blueprint(stockServices), url_prefix=PREFX_API)
     
-    imageService = ImageService(db)
-    app.register_blueprint(image.get_blueprint(imageService), url_prefix=PREFX_API)
+    app.register_blueprint(image.get_blueprint(storage), url_prefix=PREFX_API)
 
     return app
