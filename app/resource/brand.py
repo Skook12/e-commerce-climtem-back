@@ -13,15 +13,13 @@ def get_blueprint(srvc: BrandService) -> Blueprint:
 
     @bp.get('/brand/<int:id>')
     def getBrandbyid(id):
-        r = srvc.select(id)
+        r = srvc.select(f'brand_id = {id}')
         return jsonify(r)
     
     @bp.post('/brand')
     def postBrand():
         data = request.json
-        r = Brand(
-            name = data['name']
-        )
+        r = Brand(name = data['name'])
         status = srvc.insert(r.load())
         return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     

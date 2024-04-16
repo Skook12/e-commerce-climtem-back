@@ -13,7 +13,7 @@ def get_blueprint(srvc: UserService) -> Blueprint:
 
     @bp.get('/user/<int:id>')
     def getUserbyid(id):
-        r = srvc.select(id)
+        r = srvc.select(f'WHERE ID_User = {id}')
         return jsonify(r)
     
     @bp.post('/users')

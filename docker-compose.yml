@@ -25,7 +25,7 @@ services:
       POSTGRES_PASSWORD: $PSQL_PASSWORD
     volumes:
       - ./Create_Table_Ecommerce.sql:/docker-entrypoint-initdb.d/Create_Table_Ecommerce.sql
-      - /var/lib/postgres
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -35,3 +35,7 @@ networks:
   host-net:
     name: host-net
     driver: bridge
+
+volumes:
+  pgdata:
+    driver: local

@@ -6,7 +6,6 @@ from .order import OrderService
 from .stock import StockServices
 from .product import ProductService
 from .storage import StorageService
-from .image import ImageService
 
 __all__ = [
     'UserService',
@@ -16,6 +15,5 @@ __all__ = [
     'OrderService',
     'StockServices',
     'ProductService',
-    'StorageService',
-    'ImageService'
+    'StorageService'
 ]

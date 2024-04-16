@@ -5,17 +5,20 @@ from werkzeug.datastructures.file_storage import FileStorage
 from werkzeug.utils import secure_filename
 
 class StorageService(RepoI):
-    __table = "image"
+    __table = "product_image"
     __parentpath = "/app/app/content/"
 
     def __init__(self, db: connection):
         self.__conn = db
 
-    def loadFile(self, file: FileStorage, path: str):
+    def loadFile(self, file: FileStorage, path: str = None):
         """Assert file typo and add into filesystem"""
 
         if file.filename == '':
             return 'No selected file'
+        
+        if path == None:
+            path = ''
 
         if file.content_type not in ['image/jpeg', 'image/png', 'image/jpg']:
             return f'Invalid Format {file.content_type}'
@@ -23,7 +26,7 @@ class StorageService(RepoI):
         filename = secure_filename(f'{datetime.now()}_{file.filename}')
         file.save(f'{self.__parentpath + path}{filename}')
 
-        return filename
+        return f'{self.__parentpath + path}{filename}'
 
 
     def insert(self, values):
@@ -48,7 +51,7 @@ class StorageService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Product = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE ID_Product_Image = {id};"
 
         try:
             cursor.execute(query)

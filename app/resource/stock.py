@@ -6,14 +6,14 @@ from http import HTTPStatus
 def get_blueprint(srvc: StockServices) -> Blueprint:
     bp = Blueprint("Stock", __name__)
     
-    @bp.get('/stock')
-    def getStock():
-        r = srvc.select()
+    @bp.get('/stock/products/<int:id>')
+    def getStockbyProduct(id):
+        r = srvc.select(f'WHERE ID_Product = {id}')
         return jsonify(r)
 
     @bp.get('/stock/<int:id>')
     def getStockbyid(id):
-        r = srvc.select(id)
+        r = srvc.select(f'WHERE ID_Product_Stock = {id}')
         return jsonify(r)
     
     @bp.post('/stock')
