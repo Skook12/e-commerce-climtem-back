@@ -20,6 +20,11 @@ def get_blueprint(srvc: ProductService) -> Blueprint:
     def getProductbyCategory(name):
         r = srvc.select(f'JOIN Category c ON ID_Category = c.category_id WHERE c.name ~~* \'{name}\'')
         return jsonify(r)
+    
+    @bp.get('/products/query/<string:brand>/<string:cat>/<string:search>')
+    def getProductbyQuery(brand, cat, search):
+        r = srvc.select(f'p JOIN Category c ON ID_Category = c.category_id JOIN Brand b ON ID_Brand = b.brand_id WHERE c.name ~~* \'{cat}\' and b.name ~~* \'{brand}\' and p.name ~~* \'{search}\'')
+        return jsonify(r)
 
     @bp.get('/products/<int:id>')
     def getProductbyid(id):
