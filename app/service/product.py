@@ -54,7 +54,7 @@ class ProductService(RepoI):
                 'name': row[3],
                 'description': row[4],
                 'value': row[5],
-                'discount': row[6]
+                'discount': float(row[6])
             } for row in results]
 
     def update(self, column, condition, value):
