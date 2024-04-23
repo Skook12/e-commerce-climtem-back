@@ -11,6 +11,14 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         r = srvc.select()
         return jsonify(r)
 
+    @bp.get('/products/<int:page>')
+    def getProductPage(page):
+        query = f'ORDER BY ID_Product LIMIT 9'
+        if page != None and page != 0:
+            query += f' OFFSET {page * 9}'
+        r = srvc.select(query)
+        return jsonify(r)
+
     @bp.get('/products/<int:id>')
     def getProductbyid(id):
         r = srvc.select(f'WHERE ID_Product = {id}')
