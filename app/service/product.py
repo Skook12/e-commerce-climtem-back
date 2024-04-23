@@ -8,22 +8,23 @@ class ProductService(RepoI):
     def __init__(self, db: connection):
         self.__conn = db
 
-    def insert(self, values):
+    def insert(self, values) -> int:
         cursor = self.__conn.cursor()
         try:
             query = f"""
                 INSERT INTO {self.__table} (ID_Brand, ID_Category, name, description, value, discount)
                 VALUES (%s, %s, %s, %s, %s, %s)
+                RETURNING ID_Product
             """
             cursor.execute(query, values)
+            inserted_id = cursor.fetchone()[0]
             self.__conn.commit()
-        
         except Exception as e:
             self.__conn.rollback()
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
-            return e
+            return e, 500
         cursor.close()
-        return 201
+        return inserted_id
     
     def select(self, search:str=None):
         """param: 
