@@ -34,6 +34,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         query = f'''p
             JOIN Category c ON ID_Category = c.category_id
             JOIN Brand b ON ID_Brand = b.brand_id
+            JOIN product_image i ON p.ID_Product = i.ID_Product
             WHERE c.name ~~* \'{lst[0]}%\' and
             b.name ~~* \'{lst[1]}%\' and 
             p.name ~~* \'{lst[2]}%\'
