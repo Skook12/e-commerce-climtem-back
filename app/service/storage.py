@@ -50,7 +50,7 @@ class StorageService(RepoI):
         cursor = self.__conn.cursor()
         query = f"SELECT * FROM {self.__table};"
 
-        if id != None:
+        if product_id != None:
             query = f"SELECT * FROM {self.__table} WHERE ID_Product = {product_id};"
 
         try:
