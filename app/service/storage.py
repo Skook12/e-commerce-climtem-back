@@ -46,12 +46,12 @@ class StorageService(RepoI):
         cursor.close()
         return 201
     
-    def select(self, id=None):
+    def select(self, product_id=None):
         cursor = self.__conn.cursor()
         query = f"SELECT * FROM {self.__table};"
 
         if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Product_Image = {id};"
+            query = f"SELECT * FROM {self.__table} WHERE ID_Product = {product_id};"
 
         try:
             cursor.execute(query)

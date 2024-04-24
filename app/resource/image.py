@@ -9,9 +9,9 @@ def get_blueprint(srvc: StorageService) -> Blueprint:
         image = srvc.select()
         return jsonify(image)
 
-    @bp.get('/images/<int:id>')
-    def getImagebyid(id):
-        image = srvc.select(id)
+    @bp.get('products/images/<int:product_id>')
+    def getImagebyid(product_id):
+        image = srvc.select(product_id)
         return jsonify(image)
 
     return bp

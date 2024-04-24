@@ -25,15 +25,15 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         lst = [item.strip() for item in params.split(",")]
         query = f'''p
             JOIN Category c ON ID_Category = c.category_id
-            JOIN Brand b ON ID_Brand = b.brand_id 
+            JOIN Brand b ON ID_Brand = b.brand_id
             WHERE c.name ~~* \'{lst[0]}%\' and
             b.name ~~* \'{lst[1]}%\' and 
             p.name ~~* \'{lst[2]}%\'
-            ORDER BY ID_Product LIMIT 9
+            ORDER BY p.ID_Product LIMIT 9
         '''
         if page != None and page != 0:
             query += f' OFFSET {page * 9}'
-        r = srvc.select(query)
+        r = srvc.select(search=query)
         return jsonify(r)
 
     @bp.post('/products')
