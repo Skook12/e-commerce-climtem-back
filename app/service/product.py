@@ -1,5 +1,6 @@
 from datetime import datetime
 from psycopg2._psycopg import connection
+import base64
 from app.db import RepoI
 
 class ProductService(RepoI):
@@ -50,8 +51,9 @@ class ProductService(RepoI):
                     'description': row[4],
                     'value': row[5],
                     'discount': float(row[6]),
-                    'image': row[13]
-                } for row in results]
+                    'path': row[13],
+                    'image': base64.b64encode(open(row[13], "rb").read()).decode('utf-8')
+                } for row in results]         
             else:
                 r = [{
                     'id': row[0],
