@@ -16,8 +16,13 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         r = srvc.select(f'WHERE ID_Product = {id}')
         return jsonify(r)
     
+    @bp.get('/products/sales')
+    def getSales():       
+        r = srvc.select( f'WHERE discount < 1')
+        return jsonify(r)
+
     @bp.get('/products/sales/<int:page>')
-    def getSales(page):
+    def getSalesPage(page):
         query = f'WHERE discount < 1 LIMIT 9'
         if page != None and page != 0:
             query += f' OFFSET {page * 9}'

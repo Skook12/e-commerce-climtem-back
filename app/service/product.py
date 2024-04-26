@@ -42,18 +42,18 @@ class ProductService(RepoI):
         try:
             cursor.execute(query)
             results = cursor.fetchall()
-            if search != None:
+            if search != None and search.find('JOIN') != -1:
                 r = [{
                     'id': row[0],
                     'brand': row[10],
                     'category': row[8],
                     'name': row[3],
                     'description': row[4],
-                    'value': row[5],
+                    'value': float(row[5]),
                     'discount': float(row[6]),
                     'path': row[13],
                     'image': base64.b64encode(open(row[13], "rb").read()).decode('utf-8')
-                } for row in results]         
+                } for row in results]
             else:
                 r = [{
                     'id': row[0],
@@ -61,7 +61,7 @@ class ProductService(RepoI):
                     'category_id': row[2],
                     'name': row[3],
                     'description': row[4],
-                    'value': row[5],
+                    'value': float(row[5]),
                     'discount': float(row[6])
                 } for row in results]
                         
