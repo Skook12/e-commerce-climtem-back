@@ -15,6 +15,19 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
     def getProductbyid(id):
         r = srvc.select(f'WHERE ID_Product = {id}')
         return jsonify(r)
+    
+    @bp.get('/products/sales')
+    def getSales():       
+        r = srvc.select( f'WHERE discount < 1')
+        return jsonify(r)
+
+    @bp.get('/products/sales/<int:page>')
+    def getSalesPage(page):
+        query = f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE discount < 1 LIMIT 4'
+        if page != None and page != 0:
+            query += f' OFFSET {page * 4}'
+        r = srvc.select(search=query)
+        return jsonify(r)
 
     @bp.get('/products/query/<int:page>')
     def getProductbyQuery(page):
@@ -25,15 +38,16 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         lst = [item.strip() for item in params.split(",")]
         query = f'''p
             JOIN Category c ON ID_Category = c.category_id
-            JOIN Brand b ON ID_Brand = b.brand_id 
+            JOIN Brand b ON ID_Brand = b.brand_id
+            JOIN product_image i ON p.ID_Product = i.ID_Product
             WHERE c.name ~~* \'{lst[0]}%\' and
             b.name ~~* \'{lst[1]}%\' and 
             p.name ~~* \'{lst[2]}%\'
-            ORDER BY ID_Product LIMIT 9
+            ORDER BY p.ID_Product LIMIT 9
         '''
         if page != None and page != 0:
             query += f' OFFSET {page * 9}'
-        r = srvc.select(query)
+        r = srvc.select(search=query)
         return jsonify(r)
 
     @bp.post('/products')

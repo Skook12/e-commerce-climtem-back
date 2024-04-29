@@ -1,5 +1,6 @@
 from datetime import datetime
 from psycopg2._psycopg import connection
+import base64
 from app.db import RepoI
 
 class ProductService(RepoI):
@@ -41,22 +42,35 @@ class ProductService(RepoI):
         try:
             cursor.execute(query)
             results = cursor.fetchall()
-        
+            if search != None and search.find('image') != -1:
+                r = [{
+                    'id': row[0],
+                    'brand': row[10] if search.find('Brand') != -1 else row[1],
+                    'category': row[8] if search.find('Category') != -1 else row[2],
+                    'name': row[3],
+                    'description': row[4],
+                    'value': float(row[5]),
+                    'discount': float(row[6]),
+                    'path': row[13] if search.find('Category') != -1 else row[9],
+                    'image': base64.b64encode(open(row[13] if search.find('Category') != -1 else row[9], "rb").read()).decode('utf-8')
+                } for row in results]
+            else:
+                r = [{
+                    'id': row[0],
+                    'brand': row[1],
+                    'category_id': row[2],
+                    'name': row[3],
+                    'description': row[4],
+                    'value': float(row[5]),
+                    'discount': float(row[6])
+                } for row in results]
+                        
         except Exception as e:
             self.__conn.rollback()
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        return [
-            {
-                'id': row[0],
-                'brand_id': row[1],
-                'category_id': row[2],
-                'name': row[3],
-                'description': row[4],
-                'value': row[5],
-                'discount': float(row[6])
-            } for row in results]
+        return r
 
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
