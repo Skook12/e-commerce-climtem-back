@@ -42,17 +42,17 @@ class ProductService(RepoI):
         try:
             cursor.execute(query)
             results = cursor.fetchall()
-            if search != None and search.find('JOIN') != -1:
+            if search != None and search.find('image') != -1:
                 r = [{
                     'id': row[0],
-                    'brand': row[10],
-                    'category': row[8],
+                    'brand': row[10] if search.find('Brand') != -1 else row[1],
+                    'category': row[8] if search.find('Category') != -1 else row[2],
                     'name': row[3],
                     'description': row[4],
                     'value': float(row[5]),
                     'discount': float(row[6]),
-                    'path': row[13],
-                    'image': base64.b64encode(open(row[13], "rb").read()).decode('utf-8')
+                    'path': row[13] if search.find('Category') != -1 else row[9],
+                    'image': base64.b64encode(open(row[13] if search.find('Category') != -1 else row[9], "rb").read()).decode('utf-8')
                 } for row in results]
             else:
                 r = [{

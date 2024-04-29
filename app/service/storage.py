@@ -28,7 +28,6 @@ class StorageService(RepoI):
 
         return f'{self.__parentpath + path}{filename}'
 
-
     def insert(self, values):
         cursor = self.__conn.cursor()
         try:
