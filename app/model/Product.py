@@ -8,6 +8,7 @@ class Product:
     description: str
     value: float
     discount: float
+    highl: bool
 
     def load(self):
         return astuple(self)

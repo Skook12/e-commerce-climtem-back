@@ -13,7 +13,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
     @bp.get('/products/<int:id>')
     def getProductbyid(id):
-        r = srvc.select(f'WHERE ID_Product = {id}')
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id}')
         return jsonify(r)
     
     @bp.get('/products/sales')
@@ -24,6 +24,14 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
     @bp.get('/products/sales/<int:page>')
     def getSalesPage(page):
         query = f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE discount < 1 LIMIT 4'
+        if page != None and page != 0:
+            query += f' OFFSET {page * 4}'
+        r = srvc.select(search=query)
+        return jsonify(r)
+
+    @bp.get('/products/highlights/<int:page>')
+    def getHighlightPage(page):
+        query = f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.highl = True LIMIT 4'
         if page != None and page != 0:
             query += f' OFFSET {page * 4}'
         r = srvc.select(search=query)
@@ -60,7 +68,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
             name=request.form['name'],
             description=request.form['description'],
             value=request.form['value'],
-            discount=request.form['discount']
+            discount=request.form['discount'],
+            highl=request.form['highlight']
         )
         id = int(srvc.insert(r.load()))
         i = Image(
