@@ -39,14 +39,15 @@ CREATE TABLE Product (
    name VARCHAR(255),
    description TEXT,
    value DECIMAL,
-   discount DECIMAL
+   discount DECIMAL,
+   highl BOOLEAN
 );
 
 /* Tabela de criacao do pedido */
 CREATE TABLE User_Order (
   ID_Order SERIAL PRIMARY KEY, 
   ID_User INT REFERENCES UserTable(ID_User), 
-  buy_date TIMESTAMP, 
+  buy_date TIMESTAMP,
   status VARCHAR (50)
 );
 

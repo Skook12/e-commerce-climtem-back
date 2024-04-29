@@ -13,8 +13,8 @@ class ProductService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_Brand, ID_Category, name, description, value, discount)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO {self.__table} (ID_Brand, ID_Category, name, description, value, discount, highl)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
                 RETURNING ID_Product
             """
             cursor.execute(query, values)
@@ -45,14 +45,15 @@ class ProductService(RepoI):
             if search != None and search.find('image') != -1:
                 r = [{
                     'id': row[0],
-                    'brand': row[10] if search.find('Brand') != -1 else row[1],
-                    'category': row[8] if search.find('Category') != -1 else row[2],
+                    'brand': row[11] if search.find('Brand') != -1 else row[1],
+                    'category': row[9] if search.find('Category') != -1 else row[2],
                     'name': row[3],
                     'description': row[4],
                     'value': float(row[5]),
                     'discount': float(row[6]),
-                    'path': row[13] if search.find('Category') != -1 else row[9],
-                    'image': base64.b64encode(open(row[13] if search.find('Category') != -1 else row[9], "rb").read()).decode('utf-8')
+                    'higlight': row[7],
+                    'path': row[14] if search.find('Category') != -1 else row[10],
+                    'image': base64.b64encode(open(row[14] if search.find('Category') != -1 else row[10], "rb").read()).decode('utf-8')
                 } for row in results]
             else:
                 r = [{
@@ -62,7 +63,8 @@ class ProductService(RepoI):
                     'name': row[3],
                     'description': row[4],
                     'value': float(row[5]),
-                    'discount': float(row[6])
+                    'discount': float(row[6]),
+                    'higlight': row[7]
                 } for row in results]
                         
         except Exception as e:
