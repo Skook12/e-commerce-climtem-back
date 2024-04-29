@@ -23,9 +23,9 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
     @bp.get('/products/sales/<int:page>')
     def getSalesPage(page):
-        query = f'WHERE discount < 1 LIMIT 9'
+        query = f'WHERE discount < 1 LIMIT 4'
         if page != None and page != 0:
-            query += f' OFFSET {page * 9}'
+            query += f' OFFSET {page * 4}'
         r = srvc.select(search=query)
         return jsonify(r)
 
