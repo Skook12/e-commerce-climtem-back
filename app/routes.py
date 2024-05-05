@@ -34,7 +34,7 @@ def create_server(config):
     storage = StorageService(db)
 
     userService = UserService(db)
-    app.register_blueprint(user.get_blueprint(userService), url_prefix=PREFX_API)
+    app.register_blueprint(user.get_blueprint(userService, config.JWT_SETTINGS), url_prefix=PREFX_API)
 
     addressService = AddressService(db)
     app.register_blueprint(address.get_blueprint(addressService), url_prefix=PREFX_API)
