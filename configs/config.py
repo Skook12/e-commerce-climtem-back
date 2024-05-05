@@ -1,5 +1,6 @@
 import os
 import dotenv
+import secrets
 
 dotenv.load_dotenv()
 
@@ -10,4 +11,7 @@ class Config:
         'port': os.getenv('PSQL_PORT', '5432'),
         'user': os.environ['PSQL_USER'],
         'pass': os.environ['PSQL_PASSWORD'],
+    }
+    JWT_SETTINGS = {
+        'SKey': secrets.token_urlsafe(32)
     }
