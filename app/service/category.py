@@ -35,7 +35,7 @@ class CategoryService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if search != None:
-            query = f"SELECT * FROM {self.__table} WHERE {search};"
+            query = f"SELECT * FROM {self.__table} {search};"
 
         try:
             cursor.execute(query)

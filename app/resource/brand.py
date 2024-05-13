@@ -13,9 +13,15 @@ def get_blueprint(srvc: BrandService) -> Blueprint:
 
     @bp.get('/brand/<int:id>')
     def getBrandbyid(id):
-        r = srvc.select(f'brand_id = {id}')
+        r = srvc.select(f'WHERE brand_id = {id}')
         return jsonify(r)
-    
+
+    @bp.put('/brand/<int:id>')
+    def updateBrand(id):
+        data = request.json
+        srvc.update('name', f'brand_id = {id}', f'\'{data["name"]}\'')
+        return jsonify({"id": id, "name": data["name"]}), HTTPStatus.OK
+
     @bp.post('/brand')
     def postBrand():
         data = request.json

@@ -13,9 +13,15 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
 
     @bp.get('/category/<int:id>')
     def getCategorybyid(id):
-        r = srvc.select(f'category_id = {id}')
+        r = srvc.select(f'WHERE category_id = {id}')
         return jsonify(r)
-    
+
+    @bp.put('/category/<int:id>')
+    def updateCategory(id):
+        data = request.json
+        srvc.update('name', f'category_id = {id}', f'\'{data["name"]}\'')
+        return jsonify({"id": id, "name": data["name"]}), HTTPStatus.OK
+
     @bp.post('/category')
     def postCategory():
         data = request.json
