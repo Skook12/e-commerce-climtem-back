@@ -6,6 +6,7 @@ CREATE TABLE UserTable (
     name VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255),
+    cpf VARCHAR(11),
     phone BIGINT
 );
 

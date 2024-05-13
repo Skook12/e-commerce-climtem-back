@@ -12,10 +12,12 @@ class UserService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (name, email, password, phone)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO {self.__table} (name, email, password, cpf, phone)
+                VALUES (%s, %s, %s, %s, %s)
+                RETURNING ID_User
             """
             cursor.execute(query, values)
+            inserted_id = cursor.fetchone()[0]
             self.__conn.commit()
         
         except Exception as e:
@@ -23,7 +25,7 @@ class UserService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
             return e
         cursor.close()
-        return 201
+        return inserted_id
     
     def select(self, search:str=None):
         """param: 

@@ -1,10 +1,10 @@
 import jwt
-from app.model import User
-from app.service import UserService
-from http import HTTPStatus
 from flask import Blueprint, jsonify, request
+from app.model import User, Address
+from app.service import UserService, AddressService
+from http import HTTPStatus
 
-def get_blueprint(srvc: UserService, config) -> Blueprint:
+def get_blueprint(srvc: UserService, addrsrvc: AddressService, config) -> Blueprint:
     bp = Blueprint("User", __name__)
 
     @bp.get('/users')
@@ -20,14 +20,23 @@ def get_blueprint(srvc: UserService, config) -> Blueprint:
     @bp.post('/users')
     def postUser():
         data = request.json
-        r = User(
+        u = User(
             name=data['name'],
             email=data['email'],
             password=data['password'],
+            cpf=data['cpf'],
             phone=data['phone']
         )
-        status = srvc.insert(r.load())
-        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
+        id = srvc.insert(u.load())
+        a = Address(
+            user_id=id,
+            number=data['number'],
+            complement=data['complement'],
+            cep=data['cep'],
+            city=data['city']
+        )
+        status = addrsrvc.insert(a.load())
+        return jsonify([u, a]), HTTPStatus.CREATED if status == 201 else status
 
     @bp.post('/users/login')
     def Login():

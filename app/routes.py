@@ -33,11 +33,11 @@ def create_server(config):
     db = connection.getConnection(config.PSQL_SETTINGS)
     storage = StorageService(db)
 
-    userService = UserService(db)
-    app.register_blueprint(user.get_blueprint(userService, config.JWT_SETTINGS), url_prefix=PREFX_API)
-
     addressService = AddressService(db)
     app.register_blueprint(address.get_blueprint(addressService), url_prefix=PREFX_API)
+
+    userService = UserService(db)
+    app.register_blueprint(user.get_blueprint(userService, addressService, config.JWT_SETTINGS), url_prefix=PREFX_API)
     
     brandService = BrandService(db)
     app.register_blueprint(brand.get_blueprint(brandService), url_prefix=PREFX_API)
