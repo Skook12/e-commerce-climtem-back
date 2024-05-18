@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from .resource import (
     user,
-    address,
     brand,
     category,
     image,
@@ -28,16 +28,18 @@ PREFX_API = '/api/v1/'
 def create_server(config):
     '''Starts flask server'''
     app = Flask(__name__)
+    app.config['JWT_SECRET_KEY'] = config.JWT_SETTINGS['SKey']
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = config.JWT_SETTINGS['Expiretime']
+
     CORS(app)
+    JWTManager(app)
 
     db = connection.getConnection(config.PSQL_SETTINGS)
     storage = StorageService(db)
 
-    addressService = AddressService(db)
-    app.register_blueprint(address.get_blueprint(addressService), url_prefix=PREFX_API)
-
     userService = UserService(db)
-    app.register_blueprint(user.get_blueprint(userService, addressService, config.JWT_SETTINGS), url_prefix=PREFX_API)
+    addressService = AddressService(db)
+    app.register_blueprint(user.get_blueprint(userService, addressService), url_prefix=PREFX_API)
     
     brandService = BrandService(db)
     app.register_blueprint(brand.get_blueprint(brandService), url_prefix=PREFX_API)

@@ -7,6 +7,7 @@ class User:
     password: str
     cpf: str
     phone: int
+    adm: bool = False
 
     def load(self):
         return astuple(self)

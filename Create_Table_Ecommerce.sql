@@ -7,7 +7,8 @@ CREATE TABLE UserTable (
     email VARCHAR(255),
     password VARCHAR(255),
     cpf VARCHAR(11),
-    phone BIGINT
+    phone BIGINT,
+    adm BOOLEAN DEFAULT FALSE
 );
 
 /* Tabela de criacao do endereco */
@@ -82,3 +83,25 @@ CREATE TABLE Product_Image(
 	ID_Product	INT	REFERENCES	Product(ID_Product),	
 	path VARCHAR(255)
 );
+
+CREATE OR REPLACE FUNCTION check_user_duplicates() 
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Check for duplicate email
+    IF (SELECT COUNT(*) FROM UserTable WHERE email = NEW.email) > 0 THEN
+        RAISE EXCEPTION 'Duplicate email: %', NEW.email;
+    END IF;
+
+    -- Check for duplicate CPF
+    IF (SELECT COUNT(*) FROM UserTable WHERE cpf = NEW.cpf) > 0 THEN
+        RAISE EXCEPTION 'Duplicate CPF: %', NEW.cpf;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_user_duplicates_trigger
+BEFORE INSERT ON UserTable
+FOR EACH ROW
+EXECUTE FUNCTION check_user_duplicates();

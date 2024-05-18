@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from app.security.jwt_utils import admin_required
 from app.model import Category
 from app.service import CategoryService
 from http import HTTPStatus
@@ -17,12 +18,14 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
         return jsonify(r)
 
     @bp.put('/category/<int:id>')
+    @admin_required
     def updateCategory(id):
         data = request.json
         srvc.update('name', f'category_id = {id}', f'\'{data["name"]}\'')
         return jsonify({"id": id, "name": data["name"]}), HTTPStatus.OK
 
     @bp.post('/category')
+    @admin_required
     def postCategory():
         data = request.json
         r = Category(name=data['name'])

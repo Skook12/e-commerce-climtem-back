@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from app.security.jwt_utils import admin_required
 from app.model import Product, Image
 from app.service import ProductService, StorageService
 from http import HTTPStatus
@@ -59,6 +60,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         return jsonify(r)
 
     @bp.post('/products')
+    @admin_required
     def postProduct():
         file = request.files['file']
         st = strg.loadFile(file)

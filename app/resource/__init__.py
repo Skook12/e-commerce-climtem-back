@@ -1,6 +1,5 @@
 from . import (
     user,
-    address,
     brand,
     category,
     order,
@@ -11,7 +10,6 @@ from . import (
 
 __all__ = [
     'user',
-    'address',
     'brand',
     'category',
     'order',

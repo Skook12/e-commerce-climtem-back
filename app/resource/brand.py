@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from app.security.jwt_utils import admin_required
 from app.model import Brand
 from app.service import BrandService
 from http import HTTPStatus
@@ -17,12 +18,14 @@ def get_blueprint(srvc: BrandService) -> Blueprint:
         return jsonify(r)
 
     @bp.put('/brand/<int:id>')
+    @admin_required
     def updateBrand(id):
         data = request.json
         srvc.update('name', f'brand_id = {id}', f'\'{data["name"]}\'')
         return jsonify({"id": id, "name": data["name"]}), HTTPStatus.OK
 
     @bp.post('/brand')
+    @admin_required
     def postBrand():
         data = request.json
         r = Brand(name = data['name'])

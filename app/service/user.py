@@ -12,18 +12,16 @@ class UserService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (name, email, password, cpf, phone)
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO {self.__table} (name, email, password, cpf, phone, adm)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING ID_User
             """
             cursor.execute(query, values)
             inserted_id = cursor.fetchone()[0]
             self.__conn.commit()
-        
         except Exception as e:
             self.__conn.rollback()
-            print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
-            return e
+            raise e
         cursor.close()
         return inserted_id
     
@@ -48,7 +46,7 @@ class UserService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        r = [{'id': row[0], 'name': row[1], 'email': row[2], 'phone': row[4]} for row in results]
+        r = [{'id': row[0], 'name': row[1], 'email': row[2], 'phone': row[5], 'adm': row[6]} for row in results]
         return r if len(results) != 0 else None 
     
     def update(self, column, condition, value):
