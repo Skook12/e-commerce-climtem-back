@@ -16,3 +16,7 @@ class Config:
         'SKey': secrets.token_urlsafe(32),
         'Expiretime': datetime.timedelta(minutes=15)
     }
+    STMP_SETTINGS = {
+        'email': os.environ['CLIMTEM_mail'],
+        'p': os.environ['CLIMTEM_pass']
+    }

@@ -9,7 +9,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
     
     @bp.get('/products')
     def getProduct():
-        r = srvc.select()
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product')
         return jsonify(r)
 
     @bp.get('/products/<int:id>')

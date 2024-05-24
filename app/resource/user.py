@@ -1,10 +1,49 @@
+import smtplib
+import re
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
-from app.model import User, Address
 from app.service import UserService, AddressService
+from app.model import (
+    User,
+    Address,
+    is_valid_phone,
+    is_valid_cep,
+    is_valid_cpf,
+    is_valid_email
+)
 from http import HTTPStatus
 
-def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
+
+def sendEmail(u: User, config):
+    html_body = f"""
+        <html>
+        <body>
+            <h1>Olá {u.name}!</h1>
+            <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
+        </body>
+        </html>
+        """
+    message = MIMEMultipart()
+    message['From'] = config['email']
+    message['To'] = u.email
+    message['Subject'] = "Confirme a criação da sua conta na Climtem"
+
+    message.attach(MIMEText(html_body, 'html'))
+    smtp_server = "smtp.gmail.com"
+    port = 587
+    try:
+        server = smtplib.SMTP(smtp_server, port)
+        server.starttls()
+        server.login(config['email'], config['p'])
+        server.sendmail(config['email'], u.email, message.as_string())
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        server.quit()
+
+def get_blueprint(srvc: UserService, addrsrvc: AddressService, config) -> Blueprint:
     bp = Blueprint("User", __name__)
 
     @bp.get('/users')
@@ -23,28 +62,53 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     @bp.post('/users/signup')
     def SignUp():
         '''Route for signUp user'''
+        data = request.json
+        adm = False
+
+        try: 
+            adm=data['adm']
+        except Exception as e:
+            print(e)
+        
         try:
-            data = request.json
             u = User(
                 name=data['name'],
                 email=data['email'],
                 password=data['password'],
-                cpf=data['cpf'],
-                phone=data['phone'],
-                adm=data['adm']
+                cpf=re.sub(r'[^0-9]', '', data['cpf']),
+                phone=re.sub(r'[^0-9]', '', data['phone']),
+                adm=adm
             )
-            id = srvc.insert(u.load())
+
             a = Address(
-                user_id=id,
+                user_id=None,
                 number=data['number'],
                 complement=data['complement'],
-                cep=data['cep'],
+                cep=re.sub(r'[^0-9]', '', data['cep']),
                 city=data['city']
             )
+
+            if not is_valid_email(u.email):
+                raise ValueError('Email não válido.')
+            
+            if not is_valid_cpf(u.cpf):
+                raise ValueError('CPF não válido.')
+
+            if not is_valid_phone(u.phone):
+                raise ValueError('Telefone não válido.')
+
+            if not is_valid_cep(a.cep):
+                raise ValueError('CEP não válido.')
+
+            id = srvc.insert(u.load())
+            a.user_id = id
             addrsrvc.insert(a.load())
-            #TODO: Send email to new user to verify account creation
+
+            # sendEmail(u, config)
+
         except Exception as e:
             return jsonify({"[ERROR]": str(e)}), HTTPStatus.BAD_REQUEST
+      
         return jsonify([u, a]), HTTPStatus.CREATED
 
     @bp.post('/users/login')
