@@ -14,7 +14,7 @@ class Config:
     }
     JWT_SETTINGS = {
         'SKey': secrets.token_urlsafe(32),
-        'Expiretime': datetime.timedelta(minutes=15)
+        'Expiretime': datetime.timedelta(minutes=60)
     }
     STMP_SETTINGS = {
         'email': os.environ['CLIMTEM_mail'],
