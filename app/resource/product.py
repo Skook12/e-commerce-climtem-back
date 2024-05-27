@@ -80,5 +80,24 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         )
         status = strg.insert(i.load())
         return jsonify(r), HTTPStatus.CREATED if status == 201 else status
+   
+    @bp.put('/products/<int:id>')
+    @admin_required
+    def putProduct(id):
+        file = request.files['file']
+        st = strg.loadFile(file)
+        r = Product(
+            brand_id=request.form['brand_id'],
+            category_id=request.form['category_id'],
+            name=request.form['name'],
+            description=request.form['description'],
+            value=request.form['value'],
+            discount=request.form['discount'],
+            highl=request.form['highlight']
+        )
+        for attr, val in vars(r).items():
+            srvc.update(attr, f'ID_Product = {id}', val)
+        status = strg.update("path", f'product_id = {id}', st)
+        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
 
     return bp
