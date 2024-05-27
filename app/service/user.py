@@ -46,7 +46,20 @@ class UserService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
-        r = [{'id': row[0], 'name': row[1], 'email': row[2], 'phone': row[5], 'adm': row[6]} for row in results]
+        if search != None and search.find('User_Address') != -1:
+            r = [{
+                'id': row[0],
+                'name': row[1],
+                'email': row[2],
+                'cpf': row[4],
+                'phone': row[5],
+                'num': row[9],
+                'complement': row[10],
+                'cep': row[11],
+                'city': row[12]
+            } for row in results]
+        else:
+            r = [{'id': row[0], 'name': row[1], 'email': row[2], 'phone': row[5], 'adm': row[6]} for row in results]
         return r if len(results) != 0 else None 
     
     def update(self, column, condition, value):

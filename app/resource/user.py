@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from app.service import UserService, AddressService
+from app.security.jwt_utils import token_required, admin_required
 from app.model import (
     User,
     Address,
@@ -53,12 +54,12 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService, config) -> Bluepr
         r = srvc.select()
         return jsonify(r)
 
-    @bp.get('/user/<int:id>')
+    @bp.get('/users/<int:id>')
+    @token_required(id)
     def getUserbyid(id):
-        #TODO: REMOVE route
-        r = srvc.select(f'WHERE ID_User = {id}')
+        r = srvc.select(f'u JOIN User_Address a ON a.ID_User = u.ID_User WHERE u.ID_User = {id}')
         return jsonify(r)
-    
+
     @bp.post('/users/signup')
     def SignUp():
         '''Route for signUp user'''
