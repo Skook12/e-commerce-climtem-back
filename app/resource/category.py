@@ -12,6 +12,20 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
         r = srvc.select()
         return jsonify(r)
 
+    @bp.get('/categories/<int:page>')
+    def getCategories(page):
+        params = request.args.get('params[]')
+        query = ''
+        if params != None:
+            params = params.strip("{}")
+            query = f'WHERE name ~~* {params} '
+
+        query += f'LIMIT 9'
+        if page != None and page != 0:
+            query += f' OFFSET {page * 9}'
+        r = srvc.select(query)
+        return jsonify(r)
+
     @bp.get('/category/<int:id>')
     def getCategorybyid(id):
         r = srvc.select(f'WHERE category_id = {id}')
