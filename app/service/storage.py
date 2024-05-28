@@ -79,3 +79,18 @@ class StorageService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
+
+    def delete(self, id):
+        cursor = self.__conn.cursor()
+        try:
+            query = f"""
+                DELETE FROM {self.__table} WHERE ID_Product = {id};
+            """
+            cursor.execute(query)
+            self.__conn.commit()
+        
+        except Exception as e:
+            self.__conn.rollback()
+            print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
+        
+        cursor.close()

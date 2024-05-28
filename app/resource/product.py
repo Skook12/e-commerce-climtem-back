@@ -98,6 +98,13 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         for attr, val in vars(r).items():
             srvc.update(attr, f'ID_Product = {id}', val)
         status = strg.update("path", f'product_id = {id}', st)
-        return jsonify(r), HTTPStatus.CREATED if status == 201 else status
+        return jsonify(r), HTTPStatus.OK if status == 201 else status
+
+    @bp.delete('/products/<int:id>')
+    @admin_required
+    def deleteProduct(id):
+        srvc.delete(id)
+        strg.delete(id)
+        return jsonify({"msg": f'{id} Deleted.'}), HTTPStatus.OK
 
     return bp

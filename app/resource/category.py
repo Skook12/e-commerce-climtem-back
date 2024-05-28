@@ -38,6 +38,12 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
         srvc.update('name', f'category_id = {id}', f'\'{data["name"]}\'')
         return jsonify({"id": id, "name": data["name"]}), HTTPStatus.OK
 
+    @bp.delete('/category/<int:id>')
+    @admin_required
+    def deleteCategory(id):
+        srvc.delete(id)
+        return jsonify({"msg": f'{id} Deleted.'}), HTTPStatus.OK
+
     @bp.post('/category')
     @admin_required
     def postCategory():

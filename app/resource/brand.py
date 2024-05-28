@@ -38,6 +38,12 @@ def get_blueprint(srvc: BrandService) -> Blueprint:
         srvc.update('name', f'brand_id = {id}', f'\'{data["name"]}\'')
         return jsonify({"id": id, "name": data["name"]}), HTTPStatus.OK
 
+    @bp.delete('/brand/<int:id>')
+    @admin_required
+    def deleteBrand(id):
+        srvc.delete(id)
+        return jsonify({"msg": f'{id} Deleted.'}), HTTPStatus.OK
+
     @bp.post('/brand')
     @admin_required
     def postBrand():

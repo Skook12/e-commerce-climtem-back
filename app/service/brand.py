@@ -65,3 +65,18 @@ class BrandService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
+
+    def delete(self, id):
+        cursor = self.__conn.cursor()
+        try:
+            query = f"""
+                DELETE FROM {self.__table} WHERE brand_id = {id};
+            """
+            cursor.execute(query)
+            self.__conn.commit()
+        
+        except Exception as e:
+            self.__conn.rollback()
+            print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
+        
+        cursor.close()
