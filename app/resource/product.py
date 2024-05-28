@@ -84,8 +84,12 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
     @bp.put('/products/<int:id>')
     @admin_required
     def putProduct(id):
-        file = request.files['file']
-        st = strg.loadFile(file)
+        hasFile = True
+        try:
+            file = request.files['file']
+        except Exception as e:
+            hasFile = False
+
         r = Product(
             brand_id=request.form['brand_id'],
             category_id=request.form['category_id'],
@@ -97,7 +101,11 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         )
         for attr, val in vars(r).items():
             srvc.update(attr, f'ID_Product = {id}', val)
-        status = strg.update("path", f'product_id = {id}', st)
+
+        if hasFile:
+            st = strg.loadFile(file)
+            status = strg.update("path", f'product_id = {id}', st)
+
         return jsonify(r), HTTPStatus.OK if status == 201 else status
 
     @bp.delete('/products/<int:id>')
