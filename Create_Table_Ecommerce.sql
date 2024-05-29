@@ -118,12 +118,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER category_delete_trigger
-AFTER DELETE ON Category
+BEFORE DELETE ON Category
 FOR EACH ROW
 EXECUTE FUNCTION update_product_on_delete();
 
 CREATE TRIGGER brand_delete_trigger
-AFTER DELETE ON Brand
+BEFORE DELETE ON Brand
 FOR EACH ROW
 EXECUTE FUNCTION update_product_on_delete();
 
