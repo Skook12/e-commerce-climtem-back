@@ -14,7 +14,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
     @bp.get('/products/<int:id>')
     def getProductbyid(id):
-        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id}')
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product ORDER BY p.ID_Product WHERE p.ID_Product = {id}')
         return jsonify(r)
     
     @bp.get('/products/sales')
@@ -82,7 +82,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         return jsonify(r), HTTPStatus.CREATED if status == 201 else status
    
     @bp.put('/products/<int:id>')
-    # @admin_required
+    @admin_required
     def putProduct(id):
         hasFile = True
         try:
