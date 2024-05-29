@@ -104,7 +104,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
         if hasFile:
             st = strg.loadFile(file)
-            strg.update("path", f'product_id = {id}', st)
+            strg.update("path", f'product_id = {id}', f'\'{st}\'')
 
         return jsonify(r), HTTPStatus.OK
 
