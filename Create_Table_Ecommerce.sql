@@ -84,6 +84,9 @@ CREATE TABLE Product_Image(
 	path VARCHAR(255)
 );
 
+INSERT INTO brand (name) VALUES ('N/d');
+INSERT INTO category (name) VALUES ('N/d');
+
 CREATE OR REPLACE FUNCTION check_user_duplicates() 
 RETURNS TRIGGER AS $$
 BEGIN
@@ -104,13 +107,13 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION update_product_on_delete() 
 RETURNS TRIGGER AS $$
 BEGIN
-    IF TG_TABLE_NAME = 'Category' THEN
+    IF TG_TABLE_NAME = 'category' THEN
         UPDATE Product
-        SET ID_Category = NULL
+        SET ID_Category = 1
         WHERE ID_Category = OLD.category_id;
-    ELSIF TG_TABLE_NAME = 'Brand' THEN
+    ELSIF TG_TABLE_NAME = 'brand' THEN
         UPDATE Product
-        SET ID_Brand = NULL
+        SET ID_Brand = 1
         WHERE ID_Brand = OLD.brand_id;
     END IF;
     RETURN OLD;

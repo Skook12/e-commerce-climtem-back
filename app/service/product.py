@@ -58,7 +58,7 @@ class ProductService(RepoI):
             else:
                 r = [{
                     'id': row[0],
-                    'brand': row[1],
+                    'brand_id': row[1],
                     'category_id': row[2],
                     'name': row[3],
                     'description': row[4],

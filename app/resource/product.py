@@ -112,7 +112,6 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
     @admin_required
     def deleteProduct(id):
         srvc.delete(id)
-        strg.delete(id)
         return jsonify({"msg": f'{id} Deleted.'}), HTTPStatus.OK
 
     return bp
