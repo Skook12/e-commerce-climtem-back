@@ -101,7 +101,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION update_product_on_delete() 
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_TABLE_NAME = 'Category' THEN
+        UPDATE Product
+        SET ID_Category = NULL
+        WHERE ID_Category = OLD.category_id;
+    ELSIF TG_TABLE_NAME = 'Brand' THEN
+        UPDATE Product
+        SET ID_Brand = NULL
+        WHERE ID_Brand = OLD.brand_id;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER category_delete_trigger
+AFTER DELETE ON Category
+FOR EACH ROW
+EXECUTE FUNCTION update_product_on_delete();
+
+CREATE TRIGGER brand_delete_trigger
+AFTER DELETE ON Brand
+FOR EACH ROW
+EXECUTE FUNCTION update_product_on_delete();
+
 CREATE TRIGGER check_user_duplicates_trigger
 BEFORE INSERT ON UserTable
 FOR EACH ROW
 EXECUTE FUNCTION check_user_duplicates();
+
