@@ -18,7 +18,7 @@ def get_blueprint(srvc: CategoryService) -> Blueprint:
         query = ''
         if params != None:
             params = params.strip("{}")
-            query = f'WHERE name ~~* {params} '
+            query = f'WHERE name ~~* \'{params}%\' '
 
         query += f'LIMIT 9'
         if page != None and page != 0:
