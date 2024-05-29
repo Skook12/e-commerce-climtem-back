@@ -65,8 +65,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         file = request.files['file']
         st = strg.loadFile(file)
         r = Product(
-            brand_id=request.form['brand_id'],
-            category_id=request.form['category_id'],
+            ID_Brand=request.form['brand_id'],
+            ID_Category=request.form['category_id'],
             name=request.form['name'],
             description=request.form['description'],
             value=request.form['value'],
@@ -82,7 +82,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
         return jsonify(r), HTTPStatus.CREATED if status == 201 else status
    
     @bp.put('/products/<int:id>')
-    @admin_required
+    # @admin_required
     def putProduct(id):
         hasFile = True
         try:
@@ -91,8 +91,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
             hasFile = False
 
         r = Product(
-            brand_id=request.form['brand_id'],
-            category_id=request.form['category_id'],
+            ID_Brand=request.form['brand_id'],
+            ID_Category=request.form['category_id'],
             name=request.form['name'],
             description=request.form['description'],
             value=request.form['value'],
@@ -104,9 +104,9 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
         if hasFile:
             st = strg.loadFile(file)
-            status = strg.update("path", f'product_id = {id}', st)
+            strg.update("path", f'product_id = {id}', st)
 
-        return jsonify(r), HTTPStatus.OK if status == 201 else status
+        return jsonify(r), HTTPStatus.OK
 
     @bp.delete('/products/<int:id>')
     @admin_required

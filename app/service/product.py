@@ -64,7 +64,7 @@ class ProductService(RepoI):
                     'description': row[4],
                     'value': float(row[5]),
                     'discount': float(row[6]),
-                    'higlight': row[7]
+                    'highlight': row[7]
                 } for row in results]
                         
         except Exception as e:
@@ -77,6 +77,9 @@ class ProductService(RepoI):
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
         try:
+            if type(value) == str:
+                value = f'\'{value}\''
+
             query = f"""
                 UPDATE {self.__table}
                 SET {column} = {value}
