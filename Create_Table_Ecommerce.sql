@@ -113,7 +113,7 @@ BEGIN
         SET ID_Brand = NULL
         WHERE ID_Brand = OLD.brand_id;
     END IF;
-    RETURN NULL;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
