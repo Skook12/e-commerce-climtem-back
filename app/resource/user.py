@@ -1,11 +1,9 @@
-import smtplib
 import re
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from flask import Blueprint, jsonify, request
+from app.utils.mail import sendEmail
 from flask_jwt_extended import create_access_token
 from app.service import UserService, AddressService
-from app.security.jwt_utils import token_required, admin_required
+from app.security.jwt_utils import token_required
 from app.model import (
     User,
     Address,
@@ -16,33 +14,6 @@ from app.model import (
 )
 from http import HTTPStatus
 
-
-def sendEmail(u: User, config):
-    html_body = f"""
-        <html>
-        <body>
-            <h1>Olá {u.name}!</h1>
-            <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
-        </body>
-        </html>
-        """
-    message = MIMEMultipart()
-    message['From'] = config['email']
-    message['To'] = u.email
-    message['Subject'] = "Confirme a criação da sua conta na Climtem"
-
-    message.attach(MIMEText(html_body, 'html'))
-    smtp_server = "smtp.gmail.com"
-    port = 587
-    try:
-        server = smtplib.SMTP(smtp_server, port)
-        server.starttls()
-        server.login(config['email'], config['p'])
-        server.sendmail(config['email'], u.email, message.as_string())
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        server.quit()
 
 def get_blueprint(srvc: UserService, addrsrvc: AddressService, config) -> Blueprint:
     bp = Blueprint("User", __name__)
@@ -105,7 +76,14 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService, config) -> Bluepr
             a.user_id = id
             addrsrvc.insert(a.load())
 
-            # sendEmail(u, config)
+            # sendEmail(u, f"""
+            #     <html>
+            #         <body>
+            #             <h1>Olá {u.name}!</h1>
+            #             <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
+            #         </body>
+            #     </html>
+            # """, config)
 
         except Exception as e:
             return jsonify({"[ERROR]": str(e)}), HTTPStatus.BAD_REQUEST
