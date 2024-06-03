@@ -1,6 +1,6 @@
 import os
 import dotenv
-import secrets
+import secrets, datetime
 
 dotenv.load_dotenv()
 
@@ -13,5 +13,10 @@ class Config:
         'pass': os.environ['PSQL_PASSWORD'],
     }
     JWT_SETTINGS = {
-        'SKey': secrets.token_urlsafe(32)
+        'SKey': secrets.token_urlsafe(32),
+        'Expiretime': datetime.timedelta(minutes=60)
+    }
+    STMP_SETTINGS = {
+        'email': os.environ['CLIMTEM_mail'],
+        'p': os.environ['CLIMTEM_pass']
     }

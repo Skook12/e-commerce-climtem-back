@@ -58,13 +58,13 @@ class ProductService(RepoI):
             else:
                 r = [{
                     'id': row[0],
-                    'brand': row[1],
+                    'brand_id': row[1],
                     'category_id': row[2],
                     'name': row[3],
                     'description': row[4],
                     'value': float(row[5]),
                     'discount': float(row[6]),
-                    'higlight': row[7]
+                    'highlight': row[7]
                 } for row in results]
                         
         except Exception as e:
@@ -77,10 +77,28 @@ class ProductService(RepoI):
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
         try:
+            if type(value) == str:
+                value = f'\'{value}\''
+
             query = f"""
                 UPDATE {self.__table}
                 SET {column} = {value}
                 WHERE {condition};
+            """
+            cursor.execute(query)
+            self.__conn.commit()
+        
+        except Exception as e:
+            self.__conn.rollback()
+            print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
+        
+        cursor.close()
+
+    def delete(self, id):
+        cursor = self.__conn.cursor()
+        try:
+            query = f"""
+                DELETE FROM {self.__table} WHERE ID_Product = {id}
             """
             cursor.execute(query)
             self.__conn.commit()

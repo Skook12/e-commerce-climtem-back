@@ -1,6 +1,7 @@
 import os
 import base64
 from flask import Blueprint, jsonify, request
+from app.security.jwt_utils import admin_required
 from app.service import StorageService
 
 def get_blueprint(srvc: StorageService) -> Blueprint:
@@ -28,6 +29,7 @@ def get_blueprint(srvc: StorageService) -> Blueprint:
         return jsonify(f)
 
     @bp.delete('/banners/<string:name>')
+    @admin_required
     def deleteBanner(name):
         folder_path = '/app/app/content/banners'
         file_path = os.path.join(folder_path, name)
@@ -39,6 +41,7 @@ def get_blueprint(srvc: StorageService) -> Blueprint:
         return jsonify(code)
 
     @bp.post('/banners')
+    @admin_required
     def postBanners():
         file = request.files['file']
         st = srvc.loadFile(file, 'banners/')

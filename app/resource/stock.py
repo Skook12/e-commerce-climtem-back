@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from app.security.jwt_utils import admin_required
 from app.model import Stock
 from app.service import StockServices
 from http import HTTPStatus
@@ -17,6 +18,7 @@ def get_blueprint(srvc: StockServices) -> Blueprint:
         return jsonify(r)
     
     @bp.post('/stock')
+    @admin_required
     def postStock():
         data = request.json
         r = Stock(

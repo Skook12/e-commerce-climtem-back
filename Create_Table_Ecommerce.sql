@@ -6,7 +6,9 @@ CREATE TABLE UserTable (
     name VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255),
-    phone BIGINT
+    cpf VARCHAR(11),
+    phone BIGINT,
+    adm BOOLEAN DEFAULT FALSE
 );
 
 /* Tabela de criacao do endereco */
@@ -81,3 +83,55 @@ CREATE TABLE Product_Image(
 	ID_Product	INT	REFERENCES	Product(ID_Product),	
 	path VARCHAR(255)
 );
+
+INSERT INTO brand (name) VALUES ('N/d');
+INSERT INTO category (name) VALUES ('N/d');
+
+CREATE OR REPLACE FUNCTION check_user_duplicates() 
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Check for duplicate email
+    IF (SELECT COUNT(*) FROM UserTable WHERE email = NEW.email) > 0 THEN
+        RAISE EXCEPTION 'Duplicate email: %', NEW.email;
+    END IF;
+
+    -- Check for duplicate CPF
+    IF (SELECT COUNT(*) FROM UserTable WHERE cpf = NEW.cpf) > 0 THEN
+        RAISE EXCEPTION 'Duplicate CPF: %', NEW.cpf;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_product_on_delete() 
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_TABLE_NAME = 'category' THEN
+        UPDATE Product
+        SET ID_Category = 1
+        WHERE ID_Category = OLD.category_id;
+    ELSIF TG_TABLE_NAME = 'brand' THEN
+        UPDATE Product
+        SET ID_Brand = 1
+        WHERE ID_Brand = OLD.brand_id;
+    END IF;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER category_delete_trigger
+BEFORE DELETE ON Category
+FOR EACH ROW
+EXECUTE FUNCTION update_product_on_delete();
+
+CREATE TRIGGER brand_delete_trigger
+BEFORE DELETE ON Brand
+FOR EACH ROW
+EXECUTE FUNCTION update_product_on_delete();
+
+CREATE TRIGGER check_user_duplicates_trigger
+BEFORE INSERT ON UserTable
+FOR EACH ROW
+EXECUTE FUNCTION check_user_duplicates();
+
