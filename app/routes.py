@@ -39,7 +39,7 @@ def create_server(config):
 
     userService = UserService(db)
     addressService = AddressService(db)
-    app.register_blueprint(user.get_blueprint(userService, addressService, config.STMP_SETTINGS), url_prefix=PREFX_API)
+    app.register_blueprint(user.get_blueprint(userService, addressService), url_prefix=PREFX_API)
     
     brandService = BrandService(db)
     app.register_blueprint(brand.get_blueprint(brandService), url_prefix=PREFX_API)
