@@ -18,9 +18,7 @@ def token_required(fn):
     @jwt_required()
     def wrapper(*args, **kwargs):
         claims = get_jwt()
-        if not claims:
-            return jsonify({"msg": "Login needed."}), HTTPStatus.FORBIDDEN
         if claims.get('id') != kwargs["id"]:
-            return jsonify({"msg": "No access. "}), HTTPStatus.FORBIDDEN
+            return jsonify({"msg": "No access."}), HTTPStatus.FORBIDDEN
         return fn(*args, **kwargs)
     return wrapper

@@ -29,41 +29,26 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     def changeUserInfo(id):
         '''Route for change user info'''
         data = request.json
+        r = {
+            "name": data['name'],
+            "email": data['email'],
+            "cpf": re.sub(r'[^0-9]', '', data['cpf']),
+            "phone": re.sub(r'[^0-9]', '', data['phone'])
+        }
+        a = {
+            "num": data['num'],
+            "complement": data['complement'],
+            "cep": re.sub(r'[^0-9]', '', data['cep']),
+            "city": data['city']
+        }
 
-        u = User(
-            name=data['name'],
-            email=data['email'],
-            password=data['password'],
-            cpf=re.sub(r'[^0-9]', '', data['cpf']),
-            phone=re.sub(r'[^0-9]', '', data['phone'])
-        )
-
-        a = Address(
-            number=data['number'],
-            complement=data['complement'],
-            cep=re.sub(r'[^0-9]', '', data['cep']),
-            city=data['city']
-        )
-
-        if not is_valid_email(u.email):
-            raise 'Email não válido.'
-        
-        if not is_valid_cpf(u.cpf):
-            raise 'CPF não válido.'
-
-        if not is_valid_phone(u.phone):
-            raise 'Telefone não válido.'
-
-        if not is_valid_cep(a.cep):
-            raise 'CEP não válido.'
-        
-        for attr, val in vars(u).items():
+        for attr, val in r.items():
             srvc.update(attr, f'ID_User = {id}', val)
 
-        for attr, val in vars(a).items():
+        for attr, val in a.items():
             addrsrvc.update(attr, f'ID_User = {id}', val)
         
-        return jsonify({'msg': f'{u.name} Atualizou suas informações.'})
+        return jsonify({'msg': f'{r["name"]} Atualizou suas informações.'})
 
     @bp.post('/users/signup')
     def SignUp():
@@ -82,7 +67,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
 
             a = Address(
                 user_id=None,
-                number=data['number'],
+                num=data['number'],
                 complement=data['complement'],
                 cep=re.sub(r'[^0-9]', '', data['cep']),
                 city=data['city']
