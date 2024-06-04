@@ -19,13 +19,13 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     bp = Blueprint("User", __name__)
 
     @bp.get('/users/<int:id>')
-    @token_required(id)
+    @token_required
     def getUserbyid(id):
         r = srvc.select(f'u JOIN User_Address a ON a.ID_User = u.ID_User WHERE u.ID_User = {id}')
         return jsonify(r)
 
     @bp.put('/users/<int:id>')
-    @token_required(id)
+    @token_required
     def changeUserInfo(id):
         '''Route for change user info'''
         data = request.json
@@ -69,13 +69,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     def SignUp():
         '''Route for signUp user'''
         data = request.json
-        adm = False
 
-        try: 
-            adm=data['adm']
-        except Exception as e:
-            print(e)
-        
         try:
             u = User(
                 name=data['name'],
@@ -83,7 +77,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
                 password=data['password'],
                 cpf=re.sub(r'[^0-9]', '', data['cpf']),
                 phone=re.sub(r'[^0-9]', '', data['phone']),
-                adm=adm
+                adm=False
             )
 
             a = Address(
