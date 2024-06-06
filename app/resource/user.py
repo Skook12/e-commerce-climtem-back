@@ -32,7 +32,6 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         r = {
             "name": data['name'],
             "email": data['email'],
-            "cpf": re.sub(r'[^0-9]', '', data['cpf']),
             "phone": re.sub(r'[^0-9]', '', data['phone'])
         }
         a = {
