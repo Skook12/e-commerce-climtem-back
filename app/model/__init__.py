@@ -4,7 +4,6 @@ from .Category import Category
 from .Order import Order
 from .Product import Product, Image
 from .Payment import Payment
-from .Stock import Stock
 from .User import User
 from .Image import Image
 from .utils import (
@@ -22,7 +21,6 @@ __all__ = [
     'Product',
     'Image',
     'Payment',
-    'Stock',
     'User',
     'Image',
     'is_valid_cep',

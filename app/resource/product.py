@@ -71,7 +71,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
             description=request.form['description'],
             value=request.form['value'],
             discount=request.form['discount'],
-            highl=request.form['highlight']
+            highl=request.form['highlight'],
+            quantity=request.form['quantity']
         )
         id = int(srvc.insert(r.load()))
         i = Image(
@@ -97,7 +98,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
             description=request.form['description'],
             value=request.form['value'],
             discount=request.form['discount'],
-            highl=request.form['highlight']
+            highl=request.form['highlight'],
+            quantity=request.form['quantity']
         )
         for attr, val in vars(r).items():
             srvc.update(attr, f'ID_Product = {id}', val)

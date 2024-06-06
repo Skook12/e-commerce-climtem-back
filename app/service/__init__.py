@@ -3,7 +3,6 @@ from .address import AddressService
 from .brand import BrandService
 from .category import CategoryService
 from .order import OrderService
-from .stock import StockServices
 from .product import ProductService
 from .storage import StorageService
 
@@ -13,7 +12,6 @@ __all__ = [
     'BrandService',
     'CategoryService',
     'OrderService',
-    'StockServices',
     'ProductService',
     'StorageService'
 ]

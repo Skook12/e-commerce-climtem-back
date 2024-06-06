@@ -42,7 +42,8 @@ CREATE TABLE Product (
    description TEXT,
    value DECIMAL,
    discount DECIMAL,
-   highl BOOLEAN
+   highl BOOLEAN,
+   quantity	INT
 );
 
 /* Tabela de criacao do pedido */
@@ -67,15 +68,6 @@ CREATE TABLE User_Payment(
 	ID_Order INT REFERENCES User_Order(ID_Order),	
 	payment_type	VARCHAR (50),	
 	expiration DATE
-);
-
-/* Tabela de criacao do estoque do produto */
-CREATE TABLE Product_Stock(
-	ID_Product_Stock	SERIAL	PRIMARY	KEY,	
-	ID_Product	INT	REFERENCES	Product(ID_Product),	
-	quantity	INT,	
-	register_date	TIMESTAMP,	
-	modified_date	TIMESTAMP
 );
 
 CREATE TABLE Product_Image(
