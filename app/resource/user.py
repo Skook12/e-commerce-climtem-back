@@ -34,12 +34,22 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
             "email": data['email'],
             "phone": re.sub(r'[^0-9]', '', data['phone'])
         }
+     
         a = {
             "num": data['num'],
             "complement": data['complement'],
             "cep": re.sub(r'[^0-9]', '', data['cep']),
             "city": data['city']
         }
+
+        if not is_valid_email(r.email):
+            raise 'Email não válido.'
+
+        if not is_valid_phone(r.phone):
+            raise 'Telefone não válido.'
+
+        if not is_valid_cep(a.cep):
+            raise 'CEP não válido.'
 
         for attr, val in r.items():
             srvc.update(attr, f'ID_User = {id}', val)
