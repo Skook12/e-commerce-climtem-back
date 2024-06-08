@@ -14,7 +14,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
     @bp.get('/products/<int:id>')
     def getProductbyid(id):
-        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product ORDER BY p.ID_Product WHERE p.ID_Product = {id}')
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
         return jsonify(r)
     
     @bp.get('/products/sales')
