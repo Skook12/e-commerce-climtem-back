@@ -1,7 +1,7 @@
 import re
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, url_for, render_template
 from app.utils.mail import sendEmail
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt
 from app.service import UserService, AddressService
 from app.security.jwt_utils import token_required
 from app.model import (
@@ -28,36 +28,89 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     @token_required
     def changeUserInfo(id):
         '''Route for change user info'''
-        data = request.json
+        data = dict(request.json)
         r = {
-            "name": data['name'],
-            "email": data['email'],
-            "phone": re.sub(r'[^0-9]', '', data['phone'])
+            "name": data.get('name'),
+            "email": data.get('email'),
+            "phone": re.sub(r'[^0-9]', '', data.get('phone'))
         }
      
         a = {
-            "num": data['num'],
-            "complement": data['complement'],
-            "cep": re.sub(r'[^0-9]', '', data['cep']),
-            "city": data['city']
+            "num": data.get('num'),
+            "complement": data.get('complement'),
+            "cep": re.sub(r'[^0-9]', '', data.get('cep')),
+            "city": data.get('city')
         }
 
-        if not is_valid_email(r.email):
+        if not is_valid_email(r['email']):
             raise 'Email não válido.'
 
-        if not is_valid_phone(r.phone):
+        if not is_valid_phone(r['phone']):
             raise 'Telefone não válido.'
 
-        if not is_valid_cep(a.cep):
+        if not is_valid_cep(a['cep']):
             raise 'CEP não válido.'
 
         for attr, val in r.items():
-            srvc.update(attr, f'ID_User = {id}', val)
+            if val is not None:
+                srvc.update(attr, f'ID_User = {id}', val)
 
         for attr, val in a.items():
-            addrsrvc.update(attr, f'ID_User = {id}', val)
+            if val is not None:
+                addrsrvc.update(attr, f'ID_User = {id}', val)
         
         return jsonify({'msg': f'{r["name"]} Atualizou suas informações.'})
+
+    @bp.post('/users/forgetpassword/<string:email>')
+    def forgetpassword(email):
+        r = srvc.select(f'u WHERE u.email = \'{email}\'')
+        if r == None:
+            return jsonify({'msg': "Email não encontrado."}), HTTPStatus.NOT_FOUND
+        
+        payload = {
+            "id": r[0]['id'],
+            "email": r[0]['email'],
+        }
+
+        access_token = create_access_token(identity=payload['email'], additional_claims={"id": payload['id']})
+        link = url_for('User.validateuserToken', token=access_token, _external=True)
+
+        sendEmail(email, f"""
+            <html>
+                <body>
+                    <h1>Olá {r[0]['name']}!</h1>
+                    <p>Faça a redefinição da sua senha através do link abaixo.</p>
+                    <a href={link}>
+                        Redefinir senha.
+                    </a>
+                </body>
+            </html>
+        """, "Redefinição de senha.")
+
+        return jsonify({'msg': 'Email de redefinição enviado.'}), HTTPStatus.ACCEPTED
+
+    @bp.get('/users/<string:token>')
+    def validateuserToken(token):
+        if token:
+            return render_template('validate.html', access_token=token)
+        else:
+            return jsonify({'message': 'Token inválido ou expirado.'}), HTTPStatus.BAD_REQUEST
+
+    @bp.put('/users/passwordreset/<int:id>')
+    @token_required
+    def passwordreset(id):
+        data = request.json
+        claims = get_jwt()
+        srvc.update('password', f'ID_User = {id}', data['password'])
+        sendEmail(claims.get('email'), f"""
+            <html>
+                <body>
+                    <h1>Olá {claims.get('email')}!</h1>
+                    <p>Sua senha foi redefinida com sucesso!</p>
+                </body>
+            </html>
+        """, "Senha alterada.")
+        return jsonify({'msg': 'Senha alterada com sucesso.'}), HTTPStatus.ACCEPTED
 
     @bp.post('/users/signup')
     def SignUp():
@@ -98,18 +151,17 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
             a.user_id = id
             addrsrvc.insert(a.load())
 
-            # sendEmail(u, f"""
-            #     <html>
-            #         <body>
-            #             <h1>Olá {u.name}!</h1>
-            #             <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
-            #         </body>
-            #     </html>
-            # """, config)
-
         except Exception as e:
             return jsonify({"[ERROR]": str(e)}), HTTPStatus.BAD_REQUEST
-      
+        sendEmail(u.email, f"""
+                <html>
+                    <body>
+                        <h1>Olá {u.name}!</h1>
+                        <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
+                    </body>
+                </html>
+        """)
+
         return jsonify([u, a]), HTTPStatus.CREATED
 
     @bp.post('/users/login')

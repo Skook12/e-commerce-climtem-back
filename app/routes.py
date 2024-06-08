@@ -32,6 +32,8 @@ def create_server(config):
     CORS(app)
     JWTManager(app)
 
+    app.template_folder = app.root_path + '/templates'
+
     db = connection.getConnection(config.PSQL_SETTINGS)
     storage = StorageService(db)
 
