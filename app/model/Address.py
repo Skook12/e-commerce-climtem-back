@@ -4,7 +4,7 @@ from typing import Optional
 @dataclass
 class Address:
     user_id: int
-    number: int
+    num: int
     complement: Optional[str]
     cep: str
     city: str

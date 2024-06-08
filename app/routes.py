@@ -7,7 +7,6 @@ from .resource import (
     category,
     image,
     order,
-    stock,
     product
 )
 from .service import (
@@ -17,7 +16,6 @@ from .service import (
     CategoryService,
     OrderService,
     ProductService,
-    StockServices,
     StorageService
 )
 from .db import connection
@@ -33,6 +31,8 @@ def create_server(config):
 
     CORS(app)
     JWTManager(app)
+
+    app.template_folder = app.root_path + '/templates'
 
     db = connection.getConnection(config.PSQL_SETTINGS)
     storage = StorageService(db)
@@ -52,9 +52,6 @@ def create_server(config):
     
     productService = ProductService(db)
     app.register_blueprint(product.get_blueprint(productService, storage), url_prefix=PREFX_API)
-    
-    stockServices = StockServices(db)
-    app.register_blueprint(stock.get_blueprint(stockServices), url_prefix=PREFX_API)
     
     app.register_blueprint(image.get_blueprint(storage), url_prefix=PREFX_API)
 

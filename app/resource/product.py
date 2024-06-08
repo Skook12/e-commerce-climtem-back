@@ -14,7 +14,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
 
     @bp.get('/products/<int:id>')
     def getProductbyid(id):
-        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product ORDER BY p.ID_Product WHERE p.ID_Product = {id}')
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
         return jsonify(r)
     
     @bp.get('/products/sales')
@@ -71,7 +71,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
             description=request.form['description'],
             value=request.form['value'],
             discount=request.form['discount'],
-            highl=request.form['highlight']
+            highl=request.form['highlight'],
+            quantity=request.form['quantity']
         )
         id = int(srvc.insert(r.load()))
         i = Image(
@@ -97,7 +98,8 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
             description=request.form['description'],
             value=request.form['value'],
             discount=request.form['discount'],
-            highl=request.form['highlight']
+            highl=request.form['highlight'],
+            quantity=request.form['quantity']
         )
         for attr, val in vars(r).items():
             srvc.update(attr, f'ID_Product = {id}', val)

@@ -51,11 +51,11 @@ class UserService(RepoI):
                 'id': row[0],
                 'name': row[1],
                 'email': row[2],
-                'cpf': row[4],
-                'phone': row[5],
+                'cpf': f'{row[4][:3]}.{row[4][3:6]}.{row[4][6:9]}-{row[4][9:]}',
+                'phone': f'({str(row[5])[:2]}) {str(row[5])[2:3]} {str(row[5])[3:7]}-{str(row[5])[7:]}',
                 'num': row[9],
                 'complement': row[10],
-                'cep': row[11],
+                'cep': f'{row[11][:5]}-{row[11][5:]}',
                 'city': row[12]
             } for row in results]
         else:
@@ -65,6 +65,8 @@ class UserService(RepoI):
     def update(self, column, condition, value):
         cursor = self.__conn.cursor()
         try:
+            if type(value) == str:
+                value = f'\'{value}\''
             query = f"""
                 UPDATE {self.__table}
                 SET {column} = {value}

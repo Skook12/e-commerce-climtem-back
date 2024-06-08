@@ -9,6 +9,7 @@ class Product:
     value: float
     discount: float
     highl: bool
+    quantity: int
 
     def load(self):
         return astuple(self)
