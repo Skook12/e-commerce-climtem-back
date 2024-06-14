@@ -52,7 +52,11 @@ class ProductService(RepoI):
                     'value': float(row[5]),
                     'discount': float(row[6]),
                     'higlight': row[7],
-                    'quantity': row[8],
+                    'height': row[8],
+                    'width': row[9],
+                    'length': row[10],
+                    'weight': row[11],
+                    'quantity': row[12],
                     'path': row[19] if search.find('Category') != -1 else row[15],
                     'image': base64.b64encode(open(row[19] if search.find('Category') != -1 else row[15], "rb").read()).decode('utf-8')
                 } for row in results]
