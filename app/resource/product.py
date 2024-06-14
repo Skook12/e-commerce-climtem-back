@@ -82,6 +82,10 @@ def get_blueprint(srvc: ProductService, strg: StorageService ) -> Blueprint:
             value=request.form['value'],
             discount=request.form['discount'],
             highl=request.form['highlight'],
+            height=request.form['height'],
+            width=request.form['width'],
+            length=request.form['length'],
+            weight=request.form['weight'],
             quantity=request.form['quantity']
         )
         id = int(srvc.insert(r.load()))
@@ -109,6 +113,10 @@ def get_blueprint(srvc: ProductService, strg: StorageService ) -> Blueprint:
             value=request.form['value'],
             discount=request.form['discount'],
             highl=request.form['highlight'],
+            height=request.form['height'],
+            width=request.form['width'],
+            length=request.form['length'],
+            weight=request.form['weight'],
             quantity=request.form['quantity']
         )
         for attr, val in vars(r).items():

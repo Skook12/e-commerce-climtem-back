@@ -70,9 +70,10 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         payload = {
             "id": r[0]['id'],
             "email": r[0]['email'],
+            "adm": r[0]['adm']
         }
 
-        access_token = create_access_token(identity=payload['email'], additional_claims={"id": payload['id']})
+        access_token = create_access_token(identity=payload['email'], additional_claims={"adm": payload['adm'], "id": payload['id']})
         link = url_for('User.validateuserToken', token=access_token, _external=True)
 
         sendEmail(email, f"""
@@ -101,7 +102,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     def passwordreset(id):
         data = request.json
         claims = get_jwt()
-        srvc.update('password', f'ID_User = {id}', data['password'])
+        srvc.update('password', f'ID_User = {id}', str(data))
         sendEmail(claims.get('email'), f"""
             <html>
                 <body>
@@ -152,7 +153,8 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
             addrsrvc.insert(a.load())
 
         except Exception as e:
-            return jsonify({"[ERROR]": str(e)}), HTTPStatus.BAD_REQUEST
+            return jsonify({"msg": str(e)}), HTTPStatus.BAD_REQUEST
+
         sendEmail(u.email, f"""
                 <html>
                     <body>
@@ -160,7 +162,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
                         <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
                     </body>
                 </html>
-        """)
+        """, "Confirmação de criação de conta Climtem")
 
         return jsonify([u, a]), HTTPStatus.CREATED
 

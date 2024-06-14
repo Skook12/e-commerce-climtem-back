@@ -16,7 +16,7 @@ def get_blueprint(srvc: OrderService) -> Blueprint:
     def getOrderbyid(id):
         r = srvc.select(f'ID_Order = {id}')
         return jsonify(r)
-    
+
     @bp.post('/order')
     @admin_required
     def postOrder():
