@@ -161,7 +161,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
                         <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
                     </body>
                 </html>
-        """)
+        """, "Confirmação de criação de conta Climtem")
 
         return jsonify([u, a]), HTTPStatus.CREATED
 
