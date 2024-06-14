@@ -20,3 +20,6 @@ class Config:
         'email': os.environ['CLIMTEM_mail'],
         'p': os.environ['CLIMTEM_pass']
     }
+    
+    MEV_SETTINGS = os.environ['TOKEN']
+    

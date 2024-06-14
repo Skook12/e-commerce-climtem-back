@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify, request
 from app.security.jwt_utils import admin_required
 from app.model import Product, Image
-from app.service import ProductService, StorageService
+from app.service import ProductService, StorageService, calulateFreight
 from http import HTTPStatus
 
-def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
+def get_blueprint(srvc: ProductService, strg: StorageService ) -> Blueprint:
     bp = Blueprint("Product", __name__)
     
     @bp.get('/products')
@@ -16,6 +16,16 @@ def get_blueprint(srvc: ProductService, strg: StorageService) -> Blueprint:
     def getProductbyid(id):
         r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
         return jsonify(r)
+    
+    @bp.get('/products/freight/<int:id>')
+    def getProductbyFreightid(id,cep):
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
+        return calulateFreight(r,cep)
+    
+    @bp.get('/products/mutiplefreight/<int:cep>')
+    def getProductbyMutipleFreightid(id,cep):
+        r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
+        return calulateFreight(r,cep)
     
     @bp.get('/products/sales')
     def getSales():       
