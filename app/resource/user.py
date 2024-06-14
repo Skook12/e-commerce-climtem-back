@@ -152,7 +152,8 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
             addrsrvc.insert(a.load())
 
         except Exception as e:
-            return jsonify({"[ERROR]": str(e)}), HTTPStatus.BAD_REQUEST
+            return jsonify({"msg": str(e)}), HTTPStatus.BAD_REQUEST
+
         sendEmail(u.email, f"""
                 <html>
                     <body>

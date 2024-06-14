@@ -43,6 +43,10 @@ CREATE TABLE Product (
    value DECIMAL,
    discount DECIMAL,
    highl BOOLEAN,
+   height DECIMAL,
+   width DECIMAL,
+   length DECIMAL,
+   weight DECIMAL,
    quantity	INT
 );
 
@@ -51,23 +55,18 @@ CREATE TABLE User_Order (
   ID_Order SERIAL PRIMARY KEY, 
   ID_User INT REFERENCES UserTable(ID_User), 
   buy_date TIMESTAMP,
-  status VARCHAR (50)
+  status VARCHAR (50),
+  payment_type VARCHAR (50),
+  expiration DATE,
+  total_bought DECIMAL
 );
 
 /* Tabela de criacao do carrinho */
 CREATE TABLE Products_Order (
   ID_Products_Order SERIAL PRIMARY KEY, 
-  ID_Order INT REFERENCES User_Order(ID_Order), 
-  quantity INT, 
-  total_bought DECIMAL
-); 
-
-/* Tabela de criacao do pagamento */
-CREATE TABLE User_Payment(
-	ID_User_Payment SERIAL PRIMARY KEY,	
-	ID_Order INT REFERENCES User_Order(ID_Order),	
-	payment_type	VARCHAR (50),	
-	expiration DATE
+  ID_Order INT REFERENCES User_Order(ID_Order),
+  ID_Product INT REFERENCES Product(ID_Product),
+  quantity INT
 );
 
 CREATE TABLE Product_Image(
@@ -84,12 +83,12 @@ RETURNS TRIGGER AS $$
 BEGIN
     -- Check for duplicate email
     IF (SELECT COUNT(*) FROM UserTable WHERE email = NEW.email) > 0 THEN
-        RAISE EXCEPTION 'Duplicate email: %', NEW.email;
+        RAISE EXCEPTION 'Email em uso: %', NEW.email;
     END IF;
 
     -- Check for duplicate CPF
     IF (SELECT COUNT(*) FROM UserTable WHERE cpf = NEW.cpf) > 0 THEN
-        RAISE EXCEPTION 'Duplicate CPF: %', NEW.cpf;
+        RAISE EXCEPTION 'CPF em uso: %', NEW.cpf;
     END IF;
 
     RETURN NEW;

@@ -9,6 +9,10 @@ class Product:
     value: float
     discount: float
     highl: bool
+    height: float
+    width: float
+    length: float
+    weight: float
     quantity: int
 
     def load(self):
