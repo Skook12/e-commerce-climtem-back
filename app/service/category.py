@@ -35,7 +35,7 @@ class CategoryService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if search != None:
-            query = f"SELECT * FROM {self.__table} WHERE {search};"
+            query = f"SELECT * FROM {self.__table} {search};"
 
         try:
             cursor.execute(query)
@@ -55,6 +55,21 @@ class CategoryService(RepoI):
                 UPDATE {self.__table}
                 SET {column} = {value}
                 WHERE {condition};
+            """
+            cursor.execute(query)
+            self.__conn.commit()
+        
+        except Exception as e:
+            self.__conn.rollback()
+            print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
+        
+        cursor.close()
+
+    def delete(self, id):
+        cursor = self.__conn.cursor()
+        try:
+            query = f"""
+                DELETE FROM {self.__table} WHERE category_id = {id};
             """
             cursor.execute(query)
             self.__conn.commit()

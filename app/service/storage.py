@@ -28,7 +28,6 @@ class StorageService(RepoI):
 
         return f'{self.__parentpath + path}{filename}'
 
-
     def insert(self, values):
         cursor = self.__conn.cursor()
         try:
@@ -46,12 +45,12 @@ class StorageService(RepoI):
         cursor.close()
         return 201
     
-    def select(self, id=None):
+    def select(self, product_id=None):
         cursor = self.__conn.cursor()
         query = f"SELECT * FROM {self.__table};"
 
-        if id != None:
-            query = f"SELECT * FROM {self.__table} WHERE ID_Product_Image = {id};"
+        if product_id != None:
+            query = f"SELECT * FROM {self.__table} WHERE ID_Product = {product_id};"
 
         try:
             cursor.execute(query)
@@ -71,6 +70,21 @@ class StorageService(RepoI):
                 UPDATE {self.__table}
                 SET {column} = {value}
                 WHERE {condition};
+            """
+            cursor.execute(query)
+            self.__conn.commit()
+        
+        except Exception as e:
+            self.__conn.rollback()
+            print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
+        
+        cursor.close()
+
+    def delete(self, id):
+        cursor = self.__conn.cursor()
+        try:
+            query = f"""
+                DELETE FROM {self.__table} WHERE ID_Product = {id};
             """
             cursor.execute(query)
             self.__conn.commit()
