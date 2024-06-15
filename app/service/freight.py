@@ -17,10 +17,10 @@ def calulateFreight(product, postalcodeRecevier, postalcodeSender = 42700000):
         "to": { "postal_code": postalcodeRecevier },
             "products":[{
                 "id": product[0]["id"],
-                "height": product[0]["height"],
-                "width": product[0]["width"],
-                "length": product[0]["length"],
-                "weight": product[0]["weight"],
+                "height": float(product[0]["height"]),
+                "width": float(product[0]["width"]),
+                "length": float(product[0]["length"]),
+                "weight": float(product[0]["weight"]),
                 "quantity": 1
             }]
     }
@@ -32,14 +32,12 @@ def calulateFreight(product, postalcodeRecevier, postalcodeSender = 42700000):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-    
-    print(response.text)
 
-    return response
+    return response.text
 
 
 
-def calulateMutipleFreight(products, postalcodeRecevier, postalcodeSender = 42700000):
+def calulateMutipleFreight(product, postalcodeRecevier, postalcodeSender = 42700000):
     url = "https://www.melhorenvio.com.br/api/v2/me/shipment/calculate"
 
 
@@ -47,11 +45,11 @@ def calulateMutipleFreight(products, postalcodeRecevier, postalcodeSender = 4270
         "from": { "postal_code": postalcodeSender },
         "to": { "postal_code": postalcodeRecevier },
             "products":[{
-                "id": p[0]["id"],
-                "height": p[0]["height"],
-                "width": p[0]["width"],
-                "length": p[0]["length"],
-                "weight": p[0]["weight"],
+                "id": product[0]["id"],
+                "height": product[0]["height"],
+                "width": product[0]["width"],
+                "length": product[0]["length"],
+                "weight": product[0]["weight"],
                 "quantity": 1
             }for p in products]
     }
