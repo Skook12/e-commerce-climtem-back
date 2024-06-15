@@ -137,16 +137,16 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
             )
 
             if not is_valid_email(u.email):
-                raise 'Email não válido.'
+                raise Exception('Email não válido.')
             
             if not is_valid_cpf(u.cpf):
-                raise 'CPF não válido.'
+                raise Exception('CPF não válido.')
 
             if not is_valid_phone(u.phone):
-                raise 'Telefone não válido.'
+                raise Exception('Telefone não válido.')
 
             if not is_valid_cep(a.cep):
-                raise 'CEP não válido.'
+                raise Exception('CEP não válido.')
 
             id = srvc.insert(u.load())
             a.user_id = id

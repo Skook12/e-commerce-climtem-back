@@ -1,9 +1,8 @@
 from .Address import Address
 from .Brand import Brand
 from .Category import Category
-from .Order import Order
+from .Order import Order, ShoppingCar
 from .Product import Product, Image
-from .Payment import Payment
 from .User import User
 from .Image import Image
 from .utils import (
@@ -18,9 +17,9 @@ __all__ = [
     'Brand',
     'Category',
     'Order',
+    'ShoppingCar'
     'Product',
     'Image',
-    'Payment',
     'User',
     'Image',
     'is_valid_cep',
