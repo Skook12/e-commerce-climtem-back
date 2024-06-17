@@ -17,7 +17,16 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
     @bp.get('/order/<int:id>')
     @token_required
     def getOrderbyid(id):
-        r = srvc.select(f'ID_User = {id}')
+        query = f"""
+            o JOIN Products_Order po
+            ON o.ID_Order = po.ID_Order
+            JOIN Product p 
+            ON po.ID_Product = p.ID_Product
+            JOIN Product_Image i
+            ON i.ID_Product = p.ID_Product
+            WHERE ID_User = {id}
+        """
+        r = srvc.select(query)
         return jsonify(r)
 
     @bp.post('/order/<int:id>')
@@ -27,8 +36,8 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
         r = Order(
             user_id=id,
             buy_date=datetime.now(),
-            status=OrderStatus.Payment_Pending,
-            payment_type=PaymentType(data['payment_type']),
+            status=OrderStatus.Payment_Pending.value,
+            payment_type=PaymentType(data['payment_type']).value,
             expiration=datetime.today(),
             total_bought=data['total']
         )

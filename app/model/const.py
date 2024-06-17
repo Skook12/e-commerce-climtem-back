@@ -9,6 +9,6 @@ class OrderStatus(Enum):
 
 class PaymentType(Enum):
     PIX = "PIX"
-    DEBIT_CARD = "Cartao de debito"
-    CREDIT_CARD = "Cartao de credito"
+    DEBIT = "debito"
+    CREDIT = "credito"
     PAYMENT_SLIP = "Boleto"

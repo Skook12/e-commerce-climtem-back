@@ -1,5 +1,6 @@
 from datetime import datetime
 from psycopg2._psycopg import connection
+import base64
 from app.db import RepoI
 
 class OrderService(RepoI):
@@ -37,7 +38,7 @@ class OrderService(RepoI):
         query = f"SELECT * FROM {self.__table};"
 
         if search != None:
-            query = f"SELECT * FROM {self.__table} WHERE {search};"
+            query = f"SELECT * FROM {self.__table} {search};"
 
         try:
             cursor.execute(query)
@@ -55,7 +56,10 @@ class OrderService(RepoI):
             'status': row[3],
             'payment_type': row[4],
             'expiration': row[5],
-            'total_bought': row[6]
+            'total_bought': row[6],
+            'quantity': row[10],
+            'name': row[14],
+            'image':  base64.b64encode(open(row[26], "rb").read()).decode('utf-8'),
         } for row in results]
     
     def update(self, column, condition, value):
