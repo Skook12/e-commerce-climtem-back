@@ -1,6 +1,6 @@
 from dataclasses import dataclass, astuple
 from datetime import datetime
-from const import OrderStatus, PaymentType
+from .const import OrderStatus, PaymentType
 
 @dataclass
 class Order:
