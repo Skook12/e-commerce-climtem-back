@@ -27,6 +27,6 @@ __all__ = [
     'is_valid_email',
     'is_valid_cpf',
     'is_valid_phone',
-    'OrderStatus'
+    'OrderStatus',
     'PaymentType'
 ]
