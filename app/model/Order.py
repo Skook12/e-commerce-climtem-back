@@ -1,12 +1,13 @@
 from dataclasses import dataclass, astuple
 from datetime import datetime
+from const import OrderStatus, PaymentType
 
 @dataclass
 class Order:
     user_id: int
     buy_date: datetime
-    status: str
-    payment_type: str
+    status: OrderStatus
+    payment_type: PaymentType
     expiration: datetime
     total_bought: float
     

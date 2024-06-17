@@ -5,6 +5,7 @@ from .Order import Order, ShoppingCar
 from .Product import Product, Image
 from .User import User
 from .Image import Image
+from .const import OrderStatus, PaymentType
 from .utils import (
     is_valid_cep,
     is_valid_email,
@@ -17,7 +18,7 @@ __all__ = [
     'Brand',
     'Category',
     'Order',
-    'ShoppingCar'
+    'ShoppingCar',
     'Product',
     'Image',
     'User',
@@ -25,5 +26,7 @@ __all__ = [
     'is_valid_cep',
     'is_valid_email',
     'is_valid_cpf',
-    'is_valid_phone'
+    'is_valid_phone',
+    'OrderStatus'
+    'PaymentType'
 ]
