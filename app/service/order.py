@@ -60,6 +60,14 @@ class OrderService(RepoI):
             'quantity': row[10],
             'name': row[14],
             'image':  base64.b64encode(open(row[26], "rb").read()).decode('utf-8'),
+            'user_name':  row[28],
+            'user_email':  row[29],
+            'user_cpf':  row[31],
+            'user_phone':  row[32],
+            'user_num':  row[36],
+            'user_complement':  row[37],
+            'user_cep':  row[38],
+            'user_city':  row[39],
         } for row in results]
     
     def update(self, column, condition, value):
@@ -78,6 +86,7 @@ class OrderService(RepoI):
             print(f'\n===================\n[Error]({datetime.now()}):{e}\n===================\n')
         
         cursor.close()
+        return value
 
 class ShoppingCarService(RepoI):
     __table = "products_order"
