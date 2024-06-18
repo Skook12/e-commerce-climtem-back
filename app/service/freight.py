@@ -62,7 +62,7 @@ def calulateFreight(product, postalcodeRecevier, postalcodeSender = 42700000):
 
     response = requests.post(url, json=payload, headers=headers)
 
-    return response.text
+    return response.json()
 
 
 
@@ -107,4 +107,4 @@ def calulateMutipleFreight(products, postalcodeRecevier, postalcodeSender = 4270
 
     response = requests.post(url, json=payload, headers=headers)
 
-    return response.text
+    return response.json()

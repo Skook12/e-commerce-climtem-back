@@ -20,7 +20,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService ) -> Blueprint:
     @bp.get('/products/freight/<int:id>/<int:cep>')
     def getProductbyFreightid(id,cep):
         r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
-        return jsonify( calulateFreight(r,cep))
+        return calulateFreight(r,cep)
     
     @bp.get('/products/mutiplefreight/<int:cep>')
     def getProductbyMutipleFreightid(cep):
@@ -30,7 +30,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService ) -> Blueprint:
         for j in jsonList:
             r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {j["product_id"]} ORDER BY p.ID_Product')
             products.append([r[0], j['quantity']])     
-        return jsonify(calulateMutipleFreight(products,cep))
+        return calulateMutipleFreight(products,cep)
     
     @bp.get('/products/sales')
     def getSales():       
