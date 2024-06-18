@@ -11,7 +11,15 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
     @bp.get('/order')
     @admin_required
     def getOrder():
-        r = srvc.select()
+        query = f"""
+            o JOIN Products_Order po
+            ON o.ID_Order = po.ID_Order
+            JOIN Product p 
+            ON po.ID_Product = p.ID_Product
+            JOIN Product_Image i
+            ON i.ID_Product = p.ID_Product
+        """
+        r = srvc.select(query)
         return jsonify(r)
 
     @bp.get('/order/<int:id>')
