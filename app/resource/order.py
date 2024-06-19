@@ -90,7 +90,7 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
             'email.html', 
             content=f'Seu pedido {trackcode} está {OrderStatus(data["status"]).value}',
             header=f'Olá {data["email"]}!'
-            ), f'Seu pedido {trackcode} está {OrderStatus(data["status"]).value}')
+        ), f'Seu pedido {trackcode} está {OrderStatus(data["status"]).value}')
         return jsonify({'msg': "email enviado"})
 
     return bp
