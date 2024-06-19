@@ -103,14 +103,11 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         data = request.json
         claims = get_jwt()
         srvc.update('password', f'ID_User = {id}', str(data))
-        sendEmail(claims.get('email'), f"""
-            <html>
-                <body>
-                    <h1>Olá {claims.get('email')}!</h1>
-                    <p>Sua senha foi redefinida com sucesso!</p>
-                </body>
-            </html>
-        """, "Senha alterada.")
+        sendEmail(claims.get('email'), render_template(
+            'email.html', 
+            content='Sua senha foi redefinida com sucesso!',
+            header=f'Olá {claims.get('email')}!'
+        ),'Senha alterada.')
         return jsonify({'msg': 'Senha alterada com sucesso.'}), HTTPStatus.ACCEPTED
 
     @bp.post('/users/signup')
@@ -155,14 +152,11 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         except Exception as e:
             return jsonify({"msg": str(e)}), HTTPStatus.BAD_REQUEST
 
-        sendEmail(u.email, f"""
-                <html>
-                    <body>
-                        <h1>Olá {u.name}!</h1>
-                        <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
-                    </body>
-                </html>
-        """, "Confirmação de criação de conta Climtem")
+        sendEmail(u.email, render_template(
+            'email.html', 
+            content='Este é um email de validação da sua conta na plataforma Climtem.',
+            header=f'Olá {u.name}!'
+        ),'Confirmação de criação de conta Climtem.')
 
         return jsonify([u, a]), HTTPStatus.CREATED
 
