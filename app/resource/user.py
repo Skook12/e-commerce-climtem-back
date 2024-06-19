@@ -106,7 +106,7 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         sendEmail(claims.get('email'), render_template(
             'email.html', 
             content='Sua senha foi redefinida com sucesso!',
-            header=f'Olá {claims.get('email')}!'
+            header=f'Olá {claims.get("email")}!'
         ),'Senha alterada.')
         return jsonify({'msg': 'Senha alterada com sucesso.'}), HTTPStatus.ACCEPTED
 
