@@ -174,14 +174,30 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         if not data["email"] or not data["pass"]:
             return jsonify({"message": "Usuário e senha são obrigatórios"}), HTTPStatus.BAD_REQUEST
 
-        r = srvc.select(f'u WHERE u.email = \'{data["email"]}\' and u.password = \'{data["pass"]}\'')
+        r = srvc.select(f'u JOIN User_Address a ON u.ID_User = a.ID_User WHERE u.email = \'{data["email"]}\' and u.password = \'{data["pass"]}\'')
         if r != None:
             payload = {
                 "id": r[0]['id'],
                 "email": r[0]['email'],
-                "adm": r[0]['adm']
+                "adm": r[0]['adm'],
+                "cpf":  r[0]['cpf'],
+                "phone": r[0]['phone'],
+                "num": r[0]['num'],
+                "complement": r[0]['complement'],
+                "cep": r[0]['cep'],
+                "city": r[0]['city']
             }
-            access_token = create_access_token(identity=payload['email'], additional_claims={"adm": payload['adm'], "id": payload['id']})
+            access_token = create_access_token(identity=payload['email'], 
+                                               additional_claims={
+                                                    "adm": payload['adm'],
+                                                    "id": payload['id'],
+                                                    "cpf":  payload['cpf'],
+                                                    "phone": payload['phone'],
+                                                    "num": payload['num'],
+                                                    "complement": payload['complement'],
+                                                    "cep": payload['cep'],
+                                                    "city": payload['city']
+                                                })
 
             return jsonify({"access_token": access_token}), HTTPStatus.ACCEPTED
         else:
