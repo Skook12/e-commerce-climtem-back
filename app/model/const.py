@@ -8,7 +8,7 @@ class OrderStatus(Enum):
     Finalized = "Finalizado"
 
 class PaymentType(Enum):
-    PIX = "PIX"
+    PIX = "pix"
     DEBIT = "debito"
     CREDIT = "credito"
-    PAYMENT_SLIP = "Boleto"
+    PAYMENT_SLIP = "boleto"

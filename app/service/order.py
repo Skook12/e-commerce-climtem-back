@@ -13,8 +13,8 @@ class OrderService(RepoI):
         cursor = self.__conn.cursor()
         try:
             query = f"""
-                INSERT INTO {self.__table} (ID_User, buy_date, status, payment_type, expiration, total_bought)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO {self.__table} (ID_User, buy_date, status, payment_type, expiration, total_bought, track_id, transport_name, estimated_time, freight_value)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING ID_Order
             """
             cursor.execute(query, values)
@@ -57,17 +57,21 @@ class OrderService(RepoI):
             'payment_type': row[4],
             'expiration': row[5],
             'total_bought': row[6],
-            'quantity': row[10],
-            'name': row[14],
-            'image':  base64.b64encode(open(row[26], "rb").read()).decode('utf-8'),
-            'user_name':  row[28],
-            'user_email':  row[29],
-            'user_cpf':  row[31],
-            'user_phone':  row[32],
-            'user_num':  row[36],
-            'user_complement':  row[37],
-            'user_cep':  row[38],
-            'user_city':  row[39],
+            'total_bought': row[7],
+            'total_bought': row[8],
+            'total_bought': row[9],
+            'total_bought': row[10],
+            'quantity': row[14],
+            'name': row[18],
+            'image':  base64.b64encode(open(row[30], "rb").read()).decode('utf-8'),
+            'user_name':  row[32],
+            'user_email':  row[33],
+            'user_cpf':  row[34],
+            'user_phone':  row[36],
+            'user_num':  row[40],
+            'user_complement':  row[41],
+            'user_cep':  row[42],
+            'user_city':  row[43],
         } for row in results]
     
     def update(self, column, condition, value):

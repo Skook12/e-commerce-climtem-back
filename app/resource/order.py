@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from app.security.jwt_utils import admin_required, token_required
 from app.model import Order, ShoppingCar, OrderStatus, PaymentType
-from datetime import datetime
+from datetime import datetime, timedelta
+from app.utils.mail import sendEmail
 from app.service import OrderService, ShoppingCarService
 from http import HTTPStatus
 
@@ -66,7 +67,11 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
             status=OrderStatus.Payment_Pending.value,
             payment_type=PaymentType(data['payment_type']).value,
             expiration=datetime.today(),
-            total_bought=data['total']
+            total_bought=data['total'],
+            track_id=data['track_id'],
+            transport_name=data['transport_name'],
+            estimated_time=datetime.now() + timedelta(days=int(data['estimated_time'])),
+            freight_value=data['freight_value']
         )
         order_id = srvc.insert(r.load())
 
@@ -76,11 +81,16 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
             
         return jsonify(r), HTTPStatus.CREATED if status == 201 else status
     
-    @bp.put('/order/<int:id>')
+    @bp.put('/order/<string:trackcode>')
     @admin_required
-    def putStatus(id):
+    def putStatus(trackcode):
         data = request.json
-        r = srvc.update('status', f'ID_Order = {id}', f'\'{OrderStatus(data["status"]).value}\'')
-        return jsonify(r)
+        r = srvc.update('status', f'track_id = {trackcode}', f'\'{OrderStatus(data["status"]).value}\'')
+        sendEmail(data['email'], render_template(
+            'email.html', 
+            content=f'Seu pedido {trackcode} está {OrderStatus(data["status"]).value}',
+            header=f'Olá {data["email"]}!'
+            ), f'Seu pedido {trackcode} está {OrderStatus(data["status"]).value}')
+        return jsonify({'msg': "email enviado"})
 
     return bp

@@ -10,6 +10,10 @@ class Order:
     payment_type: PaymentType
     expiration: datetime
     total_bought: float
+    track_id: str
+    transport_name: str
+    estimated_time: datetime
+    freight_value: float
     
     def load(self):
         return astuple(self)

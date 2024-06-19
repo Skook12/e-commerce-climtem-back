@@ -58,7 +58,11 @@ CREATE TABLE User_Order (
   status VARCHAR (50),
   payment_type VARCHAR (50),
   expiration DATE,
-  total_bought DECIMAL
+  total_bought DECIMAL,
+  track_id VARCHAR (50),
+  transport_name VARCHAR (50),
+  estimated_time TIMESTAMP,
+  freight_value DECIMAL
 );
 
 /* Tabela de criacao do carrinho */

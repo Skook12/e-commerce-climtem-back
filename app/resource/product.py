@@ -22,7 +22,7 @@ def get_blueprint(srvc: ProductService, strg: StorageService ) -> Blueprint:
         r = srvc.select(f'p JOIN product_image i ON p.ID_Product = i.ID_Product WHERE p.ID_Product = {id} ORDER BY p.ID_Product')
         return calulateFreight(r,cep)
     
-    @bp.get('/products/mutiplefreight/<int:cep>')
+    @bp.post('/products/mutiplefreight/<int:cep>')
     def getProductbyMutipleFreightid(cep):
         products = []
         json = request.json
