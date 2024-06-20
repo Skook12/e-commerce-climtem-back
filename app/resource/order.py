@@ -84,12 +84,17 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
     @bp.put('/order/<int:id>')
     @admin_required
     def putStatus(id):
+        content = ""
         data = dict(request.json)
         r = srvc.update('status', f'ID_Order = {id}', f'\'{OrderStatus(data.get("status")).value}\'')
+        if data.get('trackcode') is not None:
+            srvc.update('track_id', f'ID_Order = {id}', f'{data.get("trackcode")}')
+            content = f'Seu pedido {id} está {OrderStatus(data.get("status")).value}, para acompanhar utilize o código de rastreamento: {data.get("trackcode")}'
+        else: 
+            content = f'Seu pedido {id} foi {OrderStatus(data.get("status")).value}.'
         sendEmail(data.get('email'), render_template(
             'email.html', 
-            content=f'Seu pedido {id} está {OrderStatus(data.get("status")).value}, para acompanhar utilize o código de rastreamento: {data.get("trackcode")}' 
-            if data.get('trackcode') is not None else f'Seu pedido {id} foi {OrderStatus(data.get("status")).value}.',
+            content=content,
             header=f'Olá {data["email"]}!'
         ), f'Seu pedido {id} está {OrderStatus(data["status"]).value}')
     
