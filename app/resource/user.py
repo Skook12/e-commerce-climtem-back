@@ -76,17 +76,12 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         access_token = create_access_token(identity=payload['email'], additional_claims={"adm": payload['adm'], "id": payload['id']})
         link = url_for('User.validateuserToken', token=access_token, _external=True)
 
-        sendEmail(email, f"""
-            <html>
-                <body>
-                    <h1>Olá {r[0]['name']}!</h1>
-                    <p>Faça a redefinição da sua senha através do link abaixo.</p>
-                    <a href={link}>
-                        Redefinir senha.
-                    </a>
-                </body>
-            </html>
-        """, "Redefinição de senha.")
+        sendEmail(email, render_template(
+            'passwordresetmail.html', 
+            content='Faça a redefinição da sua senha através do link abaixo.',
+            link=link,
+            header=f'Olá {r[0]["name"]}!'
+        ),'Redefinição de senha.')
 
         return jsonify({'msg': 'Email de redefinição enviado.'}), HTTPStatus.ACCEPTED
 
