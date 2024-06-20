@@ -66,7 +66,7 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
             buy_date=datetime.now(),
             status=OrderStatus.Payment_Pending.value,
             payment_type=PaymentType(data['payment_type']).value,
-            expiration=datetime.today(),
+            expiration=datetime.now() + timedelta(days=1),
             total_bought=float(data['total']) + float(data['freight_value']),
             track_id=0,
             transport_name=data['transport_name'],
