@@ -88,7 +88,7 @@ def get_blueprint(srvc: OrderService, carsrvc: ShoppingCarService) -> Blueprint:
         data = dict(request.json)
         r = srvc.update('status', f'ID_Order = {id}', f'\'{OrderStatus(data.get("status")).value}\'')
         if data.get('trackcode') is not None:
-            srvc.update('track_id', f'ID_Order = {id}', f'{data.get("trackcode")}')
+            srvc.update('track_id', f'ID_Order = {id}', f'\'{data.get("trackcode")}\'')
             content = f'Seu pedido {id} está {OrderStatus(data.get("status")).value}, para acompanhar utilize o código de rastreamento: {data.get("trackcode")}'
         else: 
             content = f'Seu pedido {id} foi {OrderStatus(data.get("status")).value}.'
