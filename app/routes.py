@@ -15,6 +15,7 @@ from .service import (
     BrandService,
     CategoryService,
     OrderService,
+    ShoppingCarService,
     ProductService,
     StorageService
 )
@@ -48,7 +49,8 @@ def create_server(config):
     app.register_blueprint(category.get_blueprint(categoryService), url_prefix=PREFX_API)
     
     orderService = OrderService(db)
-    app.register_blueprint(order.get_blueprint(orderService), url_prefix=PREFX_API)
+    shoppingcarService = ShoppingCarService(db)
+    app.register_blueprint(order.get_blueprint(orderService, shoppingcarService), url_prefix=PREFX_API)
     
     productService = ProductService(db)
     app.register_blueprint(product.get_blueprint(productService, storage), url_prefix=PREFX_API)

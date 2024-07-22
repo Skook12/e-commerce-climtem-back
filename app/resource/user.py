@@ -70,22 +70,18 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         payload = {
             "id": r[0]['id'],
             "email": r[0]['email'],
+            "adm": r[0]['adm']
         }
 
-        access_token = create_access_token(identity=payload['email'], additional_claims={"id": payload['id']})
+        access_token = create_access_token(identity=payload['email'], additional_claims={"adm": payload['adm'], "id": payload['id']})
         link = url_for('User.validateuserToken', token=access_token, _external=True)
 
-        sendEmail(email, f"""
-            <html>
-                <body>
-                    <h1>Olá {r[0]['name']}!</h1>
-                    <p>Faça a redefinição da sua senha através do link abaixo.</p>
-                    <a href={link}>
-                        Redefinir senha.
-                    </a>
-                </body>
-            </html>
-        """, "Redefinição de senha.")
+        sendEmail(email, render_template(
+            'passwordresetmail.html', 
+            content='Faça a redefinição da sua senha através do link abaixo.',
+            link=link,
+            header=f'Olá {r[0]["name"]}!'
+        ),'Redefinição de senha.')
 
         return jsonify({'msg': 'Email de redefinição enviado.'}), HTTPStatus.ACCEPTED
 
@@ -101,15 +97,12 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
     def passwordreset(id):
         data = request.json
         claims = get_jwt()
-        srvc.update('password', f'ID_User = {id}', data['password'])
-        sendEmail(claims.get('email'), f"""
-            <html>
-                <body>
-                    <h1>Olá {claims.get('email')}!</h1>
-                    <p>Sua senha foi redefinida com sucesso!</p>
-                </body>
-            </html>
-        """, "Senha alterada.")
+        srvc.update('password', f'ID_User = {id}', str(data))
+        sendEmail(claims.get('email'), render_template(
+            'email.html', 
+            content='Sua senha foi redefinida com sucesso!',
+            header=f'Olá {claims.get("email")}!'
+        ),'Senha alterada.')
         return jsonify({'msg': 'Senha alterada com sucesso.'}), HTTPStatus.ACCEPTED
 
     @bp.post('/users/signup')
@@ -136,31 +129,29 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
             )
 
             if not is_valid_email(u.email):
-                raise 'Email não válido.'
+                raise Exception('Email não válido.')
             
             if not is_valid_cpf(u.cpf):
-                raise 'CPF não válido.'
+                raise Exception('CPF não válido.')
 
             if not is_valid_phone(u.phone):
-                raise 'Telefone não válido.'
+                raise Exception('Telefone não válido.')
 
             if not is_valid_cep(a.cep):
-                raise 'CEP não válido.'
+                raise Exception('CEP não válido.')
 
             id = srvc.insert(u.load())
             a.user_id = id
             addrsrvc.insert(a.load())
 
         except Exception as e:
-            return jsonify({"[ERROR]": str(e)}), HTTPStatus.BAD_REQUEST
-        sendEmail(u.email, f"""
-                <html>
-                    <body>
-                        <h1>Olá {u.name}!</h1>
-                        <p>Este é um email de validação da sua conta na plataforma Climtem.</p>
-                    </body>
-                </html>
-        """)
+            return jsonify({"msg": str(e)}), HTTPStatus.BAD_REQUEST
+
+        sendEmail(u.email, render_template(
+            'email.html', 
+            content='Este é um email de validação da sua conta na plataforma Climtem.',
+            header=f'Olá {u.name}!'
+        ),'Confirmação de criação de conta Climtem.')
 
         return jsonify([u, a]), HTTPStatus.CREATED
 
@@ -172,14 +163,30 @@ def get_blueprint(srvc: UserService, addrsrvc: AddressService) -> Blueprint:
         if not data["email"] or not data["pass"]:
             return jsonify({"message": "Usuário e senha são obrigatórios"}), HTTPStatus.BAD_REQUEST
 
-        r = srvc.select(f'u WHERE u.email = \'{data["email"]}\' and u.password = \'{data["pass"]}\'')
+        r = srvc.select(f'u JOIN User_Address a ON u.ID_User = a.ID_User WHERE u.email = \'{data["email"]}\' and u.password = \'{data["pass"]}\'')
         if r != None:
             payload = {
                 "id": r[0]['id'],
                 "email": r[0]['email'],
-                "adm": r[0]['adm']
+                "adm": r[0]['adm'],
+                "cpf":  r[0]['cpf'],
+                "phone": r[0]['phone'],
+                "num": r[0]['num'],
+                "complement": r[0]['complement'],
+                "cep": r[0]['cep'],
+                "city": r[0]['city']
             }
-            access_token = create_access_token(identity=payload['email'], additional_claims={"adm": payload['adm'], "id": payload['id']})
+            access_token = create_access_token(identity=payload['email'], 
+                                               additional_claims={
+                                                    "adm": payload['adm'],
+                                                    "id": payload['id'],
+                                                    "cpf":  payload['cpf'],
+                                                    "phone": payload['phone'],
+                                                    "num": payload['num'],
+                                                    "complement": payload['complement'],
+                                                    "cep": payload['cep'],
+                                                    "city": payload['city']
+                                                })
 
             return jsonify({"access_token": access_token}), HTTPStatus.ACCEPTED
         else:

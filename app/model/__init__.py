@@ -1,11 +1,11 @@
 from .Address import Address
 from .Brand import Brand
 from .Category import Category
-from .Order import Order
+from .Order import Order, ShoppingCar
 from .Product import Product, Image
-from .Payment import Payment
 from .User import User
 from .Image import Image
+from .const import OrderStatus, PaymentType
 from .utils import (
     is_valid_cep,
     is_valid_email,
@@ -18,13 +18,15 @@ __all__ = [
     'Brand',
     'Category',
     'Order',
+    'ShoppingCar',
     'Product',
     'Image',
-    'Payment',
     'User',
     'Image',
     'is_valid_cep',
     'is_valid_email',
     'is_valid_cpf',
-    'is_valid_phone'
+    'is_valid_phone',
+    'OrderStatus',
+    'PaymentType'
 ]

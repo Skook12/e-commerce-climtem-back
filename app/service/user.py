@@ -53,6 +53,7 @@ class UserService(RepoI):
                 'email': row[2],
                 'cpf': f'{row[4][:3]}.{row[4][3:6]}.{row[4][6:9]}-{row[4][9:]}',
                 'phone': f'({str(row[5])[:2]}) {str(row[5])[2:3]} {str(row[5])[3:7]}-{str(row[5])[7:]}',
+                'adm': row[6],
                 'num': row[9],
                 'complement': row[10],
                 'cep': f'{row[11][:5]}-{row[11][5:]}',
