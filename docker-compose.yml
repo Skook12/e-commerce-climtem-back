@@ -1,6 +1,16 @@
 version: "3.5"
 
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf
+      - ./logs:/var/log/nginx
+    ports:
+      - 8080:80
+    networks:
+      - climtem-net
+
   climtem-back:
     image: climtem-back
     build:
@@ -11,10 +21,8 @@ services:
       - ./:/app
     depends_on:
       - database
-    ports:
-      - "5000:5000"
     networks:
-      - host-net
+      - climtem-net
 
   database:
     image: postgres
@@ -29,11 +37,11 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - host-net
+      - climtem-net
 
 networks:
-  host-net:
-    name: host-net
+  climtem-net:
+    name: climtem-net
     driver: bridge
 
 volumes:
